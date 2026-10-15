@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>skLADny // Ассистент Екатерины Моисеевой</title>
+  <title>skLADny // 6 Ключевых Функций ИИ-Ассистента</title>
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -18,31 +18,21 @@
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-            }
           }
         }
       }
     }
   </script>
   <style>
-    /* Mobile-first clean styles */
     * { -webkit-tap-highlight-color: transparent; }
     body {
-      background-color: #090d16;
+      background-color: #080c14;
       color: #f8fafc;
       overscroll-behavior-y: none;
     }
     .glass-card {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .safe-bottom {
@@ -52,8 +42,8 @@
 </head>
 <body class="font-sans antialiased flex flex-col min-h-screen select-none">
 
-  <!-- TOP APP BAR -->
-  <header class="glass-card sticky top-0 z-40 px-4 py-3 flex items-center justify-between border-b border-slate-800/80">
+  <!-- TOP HEADER -->
+  <header class="glass-card sticky top-0 z-40 px-4 py-3 flex items-center justify-between border-b border-slate-800">
     <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-400 to-indigo-600 flex items-center justify-center font-bold text-white text-sm shadow-md shadow-sky-500/20">
         ⚡
@@ -61,447 +51,474 @@
       <div>
         <div class="flex items-center gap-1.5">
           <span class="font-bold text-sm text-white tracking-tight">skLADny</span>
-          <span class="px-1.5 py-0.2 text-[9px] font-mono font-semibold bg-sky-500/20 text-sky-400 rounded-full">v1.0</span>
+          <span class="px-1.5 py-0.2 text-[9px] font-mono font-semibold bg-sky-500/20 text-sky-400 rounded-full">ТЗ Сергея</span>
         </div>
-        <p class="text-[10px] text-slate-400">Екатерина Моисеева &bull; Executive OS</p>
+        <p class="text-[10px] text-slate-400">Автономный операционный управляющий</p>
       </div>
     </div>
 
+    <!-- CALL CHEAT SHEET TOGGLE -->
     <div class="flex items-center gap-2">
-      <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        15 окт
-      </span>
+      <button onclick="toggleCheatSheet()" class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1 active:scale-95 transition-transform">
+        <span>📋</span> План созвона
+      </button>
     </div>
   </header>
 
-  <!-- MAIN SCROLLABLE CONTENT VIEWPORT -->
-  <main class="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-4 max-w-lg mx-auto w-full">
+  <!-- CHEAT SHEET DRAWER (FOR SERGEY'S CALL WITH KATYA) -->
+  <div id="cheat-sheet-drawer" class="hidden glass-card p-4 mx-4 mt-3 rounded-2xl border-indigo-500/40 text-xs text-slate-300 space-y-2 bg-indigo-950/40">
+    <div class="font-bold text-white flex items-center justify-between">
+      <span class="text-indigo-300">План презентации для Кати (6 шагов):</span>
+      <button onclick="toggleCheatSheet()" class="text-slate-400 font-mono text-sm">&times;</button>
+    </div>
+    <div class="space-y-1 text-[11px] text-slate-300">
+      <div><strong>1. Голос:</strong> «Катя, надиктовываешь в такси — бот сам пишет задачи и разбирает созвоны».</div>
+      <div><strong>2. Задачи:</strong> «Папка "Ожидания" сама контролирует верстальщика и типографию коробок».</div>
+      <div><strong>3. Ритуалы:</strong> «В 09:00 ровно 3 приоритета дня, а в 20:00 — 2 минуты на итоги перед сном».</div>
+      <div><strong>4. Календарь:</strong> «Бронирует встречи и защищает 2 часа на важные дела без звонков».</div>
+      <div><strong>5. Мозг RAG:</strong> «Помнит все договоренности из прошлых звонков по файлам .md на Диске».</div>
+      <div><strong>6. Контроль:</strong> «Кнопки подтверждения от дурака — бот ничего не сделает без твоего ОК».</div>
+    </div>
+  </div>
 
-    <!-- ============================================== -->
-    <!-- TAB 1: ☀️ УТРЕННИЙ ФОКУС (TASKS & TIME-BLOCKS) -->
-    <!-- ============================================== -->
-    <section id="tab-focus" class="tab-content space-y-4">
+  <!-- 6 CORE FUNCTIONS TOP SCROLLER -->
+  <div class="px-4 pt-3 pb-1 border-b border-slate-800/80 bg-slate-950/80 sticky top-[57px] z-30">
+    <div class="flex gap-1.5 overflow-x-auto pb-2 text-[11px] font-medium" id="fn-nav">
+      <button onclick="switchFn(1)" id="fn-btn-1" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-sky-500 text-white font-semibold whitespace-nowrap shadow-sm">1. Голос & Встречи</button>
+      <button onclick="switchFn(2)" id="fn-btn-2" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">2. Задачи & Ожидания</button>
+      <button onclick="switchFn(3)" id="fn-btn-3" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">3. Ритуалы 09/20</button>
+      <button onclick="switchFn(4)" id="fn-btn-4" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">4. Календарь</button>
+      <button onclick="switchFn(5)" id="fn-btn-5" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">5. Цифровой Мозг</button>
+      <button onclick="switchFn(6)" id="fn-btn-6" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">6. Контроль Loop</button>
+      <button onclick="switchFn(7)" id="fn-btn-7" class="fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">📄 Договоры (PDF)</button>
+    </div>
+  </div>
+
+  <!-- MAIN SCROLLABLE BODY -->
+  <main class="flex-1 overflow-y-auto px-4 py-4 pb-16 space-y-4 max-w-lg mx-auto w-full">
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 1: МУЛЬТИМОДАЛЬНЫЙ ГОЛОСОВОЙ ВВОД И ВСТРЕЧИ    -->
+    <!-- ======================================================== -->
+    <section id="fn-view-1" class="fn-view space-y-4">
       
-      <!-- PROGRESS BANNER -->
-      <div class="glass-card p-4 rounded-2xl space-y-2.5">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-white flex items-center gap-1.5">
-            <span>☀️</span> Фокус внимания на сегодня
-          </span>
-          <span class="font-mono text-sky-400 font-semibold text-[11px]" id="focus-progress-text">1 из 3 закрыто (33%)</span>
-        </div>
-        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-          <div id="focus-progress-bar" class="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-300" style="width: 33%"></div>
-        </div>
-      </div>
-
-      <!-- INTERACTIVE TASKS CHECKLIST -->
-      <div class="space-y-2">
-        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-1">Приоритеты первого ранга:</div>
-
-        <!-- TASK 1 -->
-        <div onclick="toggleTask(1)" id="task-card-1" class="glass-card p-3.5 rounded-2xl flex items-start gap-3 transition-all active:scale-[0.99] cursor-pointer border-slate-700/80">
-          <div id="task-check-1" class="w-5 h-5 rounded-lg border-2 border-emerald-500 bg-emerald-500 text-white flex items-center justify-center text-xs mt-0.5 shrink-0 transition-colors">
-            ✓
-          </div>
-          <div class="flex-1 text-xs space-y-0.5">
-            <div id="task-text-1" class="font-semibold text-slate-400 line-through">Отправить готовый PDF в БФ «Доброе дело»</div>
-            <div class="text-[10px] text-emerald-400 font-mono">Транш 110 000 руб. &bull; Договор готов</div>
-          </div>
-        </div>
-
-        <!-- TASK 2 -->
-        <div onclick="toggleTask(2)" id="task-card-2" class="glass-card p-3.5 rounded-2xl flex items-start gap-3 transition-all active:scale-[0.99] cursor-pointer">
-          <div id="task-check-2" class="w-5 h-5 rounded-lg border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-xs mt-0.5 shrink-0 transition-colors"></div>
-          <div class="flex-1 text-xs space-y-0.5">
-            <div id="task-text-2" class="font-semibold text-white">Звонок Артуру Шугурову («Дикобраз», Томск)</div>
-            <div class="text-[10px] text-slate-400">Согласовать адрес СДЭК для 2 тестовых комплектов</div>
-          </div>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-400 font-mono shrink-0">15:00</span>
-        </div>
-
-        <!-- TASK 3 -->
-        <div onclick="toggleTask(3)" id="task-card-3" class="glass-card p-3.5 rounded-2xl flex items-start gap-3 transition-all active:scale-[0.99] cursor-pointer">
-          <div id="task-check-3" class="w-5 h-5 rounded-lg border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-xs mt-0.5 shrink-0 transition-colors"></div>
-          <div class="flex-1 text-xs space-y-0.5">
-            <div id="task-text-3" class="font-semibold text-white">Приемка буклета «Бродилка» у верстальщика</div>
-            <div class="text-[10px] text-amber-400 font-mono">⚠️ Дедлайн сдачи этапа: 18:00</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DEEP WORK TIMER CARD -->
-      <div class="glass-card p-4 rounded-2xl space-y-3 bg-gradient-to-r from-sky-950/30 to-indigo-950/20 border-sky-500/20">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-base">🛡️</span>
-            <div>
-              <div class="text-xs font-bold text-sky-300">Слот «Глубокая работа»</div>
-              <div class="text-[10px] text-slate-400">Финмодель & Заявка в Сколково</div>
-            </div>
-          </div>
-          <div class="font-mono text-sm font-bold text-white bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800" id="deep-timer">
-            01:45:20
-          </div>
-        </div>
-        <button onclick="toggleDeepTimer()" id="timer-btn" class="w-full py-2 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 rounded-xl text-xs font-semibold transition-all">
-          Запустить режим фокуса
-        </button>
-      </div>
-
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 2: 📄 ДОКУМЕНТЫ (PDF ЗА 30 СЕКУНД)        -->
-    <!-- ============================================== -->
-    <section id="tab-docs" class="tab-content hidden space-y-4">
-      
-      <div class="glass-card p-4 rounded-2xl space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="font-bold text-xs text-white flex items-center gap-1.5">
-            <span>⚡</span> Конструктор документов за 30 сек
-          </h2>
-          <span class="text-[10px] text-emerald-400 font-mono">Печать + Подпись</span>
-        </div>
-
-        <!-- FORM CONTROLS -->
-        <div class="space-y-2.5 text-xs">
-          <div>
-            <label class="block text-[11px] text-slate-400 mb-1">Шаблон документа:</label>
-            <select id="doc-template" onchange="calcDocTotal()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-white text-xs focus:outline-none">
-              <option value="contract">Договор поставки игр (для БФ и меценатов)</option>
-              <option value="kp">Коммерческое предложение (Корпоративный подарок)</option>
-              <option value="letter">Официальное письмо-прошение от детского дома</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[11px] text-slate-400 mb-1">Контрагент / Организация:</label>
-            <input id="doc-target-org" type="text" value="БФ «Доброе дело» (г. Москва)" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-white text-xs focus:outline-none">
-          </div>
-
-          <div class="grid grid-cols-2 gap-2.5">
-            <div>
-              <label class="block text-[11px] text-slate-400 mb-1">Количество (шт):</label>
-              <input id="doc-target-qty" type="number" value="20" oninput="calcDocTotal()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-white text-xs focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-[11px] text-slate-400 mb-1">Цена за шт (руб):</label>
-              <input id="doc-target-price" type="number" value="5500" oninput="calcDocTotal()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-white text-xs focus:outline-none">
-            </div>
-          </div>
-
-          <div class="p-2.5 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between font-mono text-xs">
-            <span class="text-slate-400">Итоговая сумма:</span>
-            <span class="text-emerald-400 font-bold" id="doc-total-sum">110 000 руб.</span>
-          </div>
-
-          <button onclick="generateDocFlow()" id="btn-gen-doc" class="w-full py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-sky-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5">
-            <span>✨</span> Сформировать готовый PDF
-          </button>
-        </div>
-      </div>
-
-      <!-- LAST GENERATED DOC CARD -->
-      <div id="generated-preview-card" class="glass-card p-4 rounded-2xl space-y-2.5 border-emerald-500/30">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-white flex items-center gap-1.5">
-            <span class="text-emerald-400">✓</span> Готовый документ
-          </span>
-          <span class="text-[10px] text-slate-400 font-mono">300 DPI &bull; С печатью</span>
-        </div>
-        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 text-xs">
-          <div class="font-semibold text-white" id="card-doc-name">Договор_Поставки_Доброе_Дело_20шт.pdf</div>
-          <div class="text-[11px] text-slate-400">ИП Моисеева Е.И. &bull; 110 000 руб. &bull; Факсимиле наложено</div>
-        </div>
-        <div class="grid grid-cols-2 gap-2 pt-1 text-xs font-semibold">
-          <button onclick="openFullPdfModal()" class="py-2 bg-slate-800 hover:bg-slate-700 text-sky-400 rounded-xl transition-colors">
-            👁️ Открыть бланк
-          </button>
-          <button onclick="alert('Документ сохранен в Google Drive / 02_Договоры_и_БФ и отправлен в чат!')" class="py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-colors">
-            📤 Отправить
-          </button>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 3: 📊 МНОГОКОНТУРНАЯ CRM («СИРЕМКА»)       -->
-    <!-- ============================================== -->
-    <section id="tab-crm" class="tab-content hidden space-y-4">
-      
-      <!-- CRM HEADER WITH FILTER CHIPS -->
-      <div class="space-y-2.5">
-        <div class="relative">
-          <input id="crm-search-input" oninput="filterCrmTable()" type="text" placeholder="Поиск по названию или городу..."
-                 class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500">
-          <span class="absolute left-2.5 top-2 text-slate-500 text-xs">🔍</span>
-        </div>
-
-        <div class="flex gap-1.5 overflow-x-auto text-[11px]">
-          <button onclick="filterCrmCategory('all')" id="crm-chip-all" class="crm-filter-chip px-3 py-1 rounded-lg bg-sky-500 text-white font-semibold whitespace-nowrap">Все (4)</button>
-          <button onclick="filterCrmCategory('school')" id="crm-chip-school" class="crm-filter-chip px-3 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">Школы & Центры</button>
-          <button onclick="filterCrmCategory('patron')" id="crm-chip-patron" class="crm-filter-chip px-3 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">Меценаты</button>
-          <button onclick="filterCrmCategory('partner')" id="crm-chip-partner" class="crm-filter-chip px-3 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">Партнеры Djuls</button>
-        </div>
-      </div>
-
-      <!-- SMART MATCHER BANNER -->
-      <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between text-xs">
-        <div class="text-[11px] text-amber-200">
-          💡 <strong>Стыковка:</strong> Детдом №3 (Новосибирск) $\leftrightarrow$ ООО СибТранс
-        </div>
-        <button onclick="alert('Сформировано персональное обращение к ООО СибТранс!')" class="px-2.5 py-1 bg-amber-500 text-slate-950 font-bold text-[10px] rounded-lg shrink-0">
-          Связать &rarr;
-        </button>
-      </div>
-
-      <!-- CRM CARDS LIST -->
-      <div id="crm-cards-container" class="space-y-2">
-        <!-- Rendered via JS -->
-      </div>
-
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 4: 🎭 3D-СМЫСЛЫ (ПОЗИЦИОНИРОВАНИЕ)         -->
-    <!-- ============================================== -->
-    <section id="tab-position" class="tab-content hidden space-y-4">
-      
-      <div class="glass-card p-4 rounded-2xl space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="font-bold text-xs text-white flex items-center gap-1.5">
-            <span>🎭</span> 3D-Позиционирование Моисеевой
-          </h2>
-          <span class="text-[10px] text-sky-400 font-mono">1 клик в буфер</span>
-        </div>
-
-        <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs">
-          <button onclick="setPosTab('gr')" id="tab-btn-gr" class="pos-btn py-1.5 rounded-lg bg-sky-500 text-white font-semibold">🏛️ GR</button>
-          <button onclick="setPosTab('b2b')" id="tab-btn-b2b" class="pos-btn py-1.5 rounded-lg text-slate-400">💼 B2B</button>
-          <button onclick="setPosTab('b2c')" id="tab-btn-b2c" class="pos-btn py-1.5 rounded-lg text-slate-400">👨‍👩‍👧 B2C</button>
-        </div>
-
-        <div id="pos-text-box" class="p-3.5 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed italic">
-          <!-- Injected via JS -->
-        </div>
-
-        <button onclick="copyPosText()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-750 text-sky-400 font-semibold rounded-xl text-xs border border-slate-700/80 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5">
-          <span>📋</span> Скопировать текст для отправки
-        </button>
-      </div>
-
-    </section>
-
-    <!-- ============================================== -->
-    <!-- TAB 5: 🎙️ ГОЛОСОВОЙ ДИАЛОГ (QUICK CHAT)        -->
-    <!-- ============================================== -->
-    <section id="tab-chat" class="tab-content hidden space-y-3">
-      
-      <div class="glass-card p-4 rounded-2xl space-y-2 text-xs">
-        <div class="font-bold text-white flex items-center gap-1.5">
-          <span>🎙️</span> Голосовое управление операционкой
-        </div>
-        <p class="text-slate-400 text-[11px] leading-relaxed">
-          Нажмите на быстрый сценарий, чтобы проверить, как ассистент распознает голосовые поручения и меняет базу:
+      <!-- HERO -->
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 1 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">Мультимодальный ввод & Протоколирование</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Приём голосовых заметок на ходу и автоматическая обработка созвонов/встреч (извлечение договоренностей и дедлайнов).
         </p>
+      </div>
 
-        <div class="space-y-1.5 pt-1">
-          <button onclick="simulateScenarioChat('call')" class="w-full p-2.5 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-300 flex items-center justify-between">
-            <span>📞 «Итог созвона со школой Зёрнышки»</span>
-            <span class="text-sky-400 font-mono text-[10px]">Тест &rarr;</span>
+      <!-- INTERACTIVE TEST 1.1: ГОЛОСОВЫЕ НА ХОДУ -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-white flex items-center gap-1.5">
+            <span>🎙️</span> 1.1. Голосовая заметка на ходу
+          </span>
+          <span class="text-[10px] text-sky-400 font-mono">Нажмите тест</span>
+        </div>
+
+        <button onclick="testVoiceMemo()" class="w-full p-3 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-200 transition-all flex items-start gap-2.5 active:scale-[0.99]">
+          <span class="text-base shrink-0 mt-0.5">▶️</span>
+          <div>
+            <div class="font-semibold text-sky-300">«Катя в такси»: поручение по коробкам</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">«Напомни завтра в 11:00 узнать у типографии цену партии коробок от 30 шт.»</div>
+          </div>
+        </button>
+
+        <!-- RESPONSE CONTAINER -->
+        <div id="voice-memo-result" class="hidden p-3 bg-slate-950 rounded-xl border border-sky-500/30 text-xs space-y-1.5">
+          <div class="text-emerald-400 font-bold flex items-center gap-1 text-[11px]">
+            <span>✓</span> Распознано и оформлено в задачу:
+          </div>
+          <div class="text-slate-300 pl-2 border-l border-slate-800 space-y-0.5 text-[11px]">
+            <div>• <strong>Задача:</strong> Запрос в типографию по тиражу коробок (от 30 шт.)</div>
+            <div>• <strong>Категория:</strong> скЛАДушка // Производство</div>
+            <div>• <strong>Срок:</strong> Завтра, 16 октября в 11:00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE TEST 1.2: ОБРАБОТКА СОЗВОНА -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-white flex items-center gap-1.5">
+            <span>📞</span> 1.2. Обработка созвона / встречи
+          </span>
+          <span class="text-[10px] text-indigo-400 font-mono">Аудио 38 мин</span>
+        </div>
+
+        <button onclick="testMeetingDigest()" class="w-full p-3 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-200 transition-all flex items-start gap-2.5 active:scale-[0.99]">
+          <span class="text-base shrink-0 mt-0.5">📁</span>
+          <div>
+            <div class="font-semibold text-indigo-300">Созвон: Анна Золотаревская (ТПП & БФ)</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Автоматический разбор 38 минут зум-встречи по благотворительному траншу</div>
+          </div>
+        </button>
+
+        <div id="meeting-digest-result" class="hidden p-3 bg-slate-950 rounded-xl border border-indigo-500/30 text-xs space-y-2">
+          <div class="text-indigo-300 font-bold text-[11px] flex items-center justify-between">
+            <span>📋 Протокол встречи в .md сохранен на Диск:</span>
+            <span class="font-mono text-[9px] text-emerald-400">35 сек</span>
+          </div>
+          <div class="text-[11px] text-slate-300 space-y-1 pl-2 border-l border-indigo-500/40">
+            <div><strong>1. Решение:</strong> Меценат перевел 110 000 руб. в фонд. Средства ждут договор от ИП Моисеева.</div>
+            <div><strong>2. Обязательство:</strong> Отправить подписанный договор поставки до 17 октября.</div>
+            <div><strong>3. Перспектива:</strong> Включение игры в секцию инклюзии ТПП в ноябре.</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 2: СТРУКТУРИРОВАНИЕ ЗАДАЧ & «ОЖИДАНИЯ»          -->
+    <!-- ======================================================== -->
+    <section id="fn-view-2" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 2 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">Автоматическое структурирование задач</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Разложение по сферам и проектам (Notion/Google Sheets) + контроль делегирования (папка «Ожидания»).
+        </p>
+      </div>
+
+      <!-- TABS: ПО СФЕРАМ / ОЖИДАНИЯ -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs">
+        <button onclick="setTaskTab('spheres')" id="btn-tab-spheres" class="py-1.5 rounded-lg bg-sky-500 text-white font-semibold">По сферам (Notion)</button>
+        <button onclick="setTaskTab('delegation')" id="btn-tab-delegation" class="py-1.5 rounded-lg text-slate-400">Папка «Ожидания»</button>
+      </div>
+
+      <!-- CONTENT: ПО СФЕРАМ -->
+      <div id="tasks-spheres-box" class="space-y-2.5">
+        <!-- SPHERE 1 -->
+        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sky-300">📦 скЛАДушка (Производство & Склад)</span>
+            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 text-[10px] font-mono">P1 Приоритет</span>
+          </div>
+          <div class="text-[11px] text-slate-300 space-y-1 pl-2 border-l border-sky-500/40">
+            <div>• Отправить 20 игр в БФ «Доброе дело» (Транш 110 000 руб.)</div>
+            <div>• Распродажа 300 упрощенных наборов по 1 200–1 500 руб.</div>
+          </div>
+        </div>
+
+        <!-- SPHERE 2 -->
+        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-300">🚀 Партнерство Djuls AI & Сбыт</span>
+            <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 text-[10px] font-mono">P2 Приоритет</span>
+          </div>
+          <div class="text-[11px] text-slate-300 space-y-1 pl-2 border-l border-indigo-500/40">
+            <div>• Отправка 2 тестовых комплектов Артуру Шугурову (Томск)</div>
+            <div>• Допродажа ИИ-ассистента сданному клиенту Сергея</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT: ПАПКА ОЖИДАНИЯ -->
+      <div id="tasks-delegation-box" class="hidden space-y-2.5">
+        <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1 text-xs">
+          <div class="font-bold text-amber-300 flex items-center justify-between">
+            <span>⚠️ Дизайнер-верстальщик (Illustrator)</span>
+            <span class="font-mono text-[10px]">Дедлайн: Сегодня 18:00</span>
+          </div>
+          <p class="text-[11px] text-slate-300">Правка цифр 0–9 и животных в буклете «Бродилка».</p>
+          <button onclick="alert('Сформирован пинг верстальщику: Привет! Как прогресс по цифрам 0-9? Ждем макет к 18:00!')" class="mt-1 w-full py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg text-[10px]">
+            💬 Отправить пинг в Telegram
           </button>
-          <button onclick="simulateScenarioChat('task')" class="w-full p-2.5 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-300 flex items-center justify-between">
-            <span>⏳ «Напомни про типографию коробок»</span>
-            <span class="text-sky-400 font-mono text-[10px]">Тест &rarr;</span>
+        </div>
+
+        <div class="p-3 glass-card rounded-xl space-y-1 text-xs">
+          <div class="font-bold text-slate-300 flex items-center justify-between">
+            <span>📦 Фабрика упаковки (Коробки)</span>
+            <span class="font-mono text-[10px] text-slate-500">Срок: 20 октября</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Расчет партии жестких коробок на 59 000 руб. (ждет транш).</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 3: ЕЖЕДНЕВНЫЕ УПРАВЛЯЮЩИЕ РИТУАЛЫ (09:00 / 20:00) -->
+    <!-- ======================================================== -->
+    <section id="fn-view-3" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 3 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">Ежедневные управляющие ритуалы</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Утренний фокус (09:00) с 3–4 приоритетами + Вечерний 2-минутный голосовой отчёт (20:00) с автопереносом дел.
+        </p>
+      </div>
+
+      <!-- MORNING FOCUS (09:00) -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-amber-300 flex items-center gap-1.5">
+            <span>☀️</span> Утренний Фокус (09:00 в Telegram)
+          </span>
+          <span class="text-[10px] text-slate-400 font-mono">3 главных дела</span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div onclick="toggleTaskFn3(1)" class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center gap-2.5 cursor-pointer">
+            <span id="f3-chk-1" class="w-4 h-4 rounded border border-emerald-500 bg-emerald-500 text-white flex items-center justify-center text-[10px]">✓</span>
+            <span id="f3-txt-1" class="text-slate-400 line-through text-[11px]">Отправить PDF-договор в БФ «Доброе дело»</span>
+          </div>
+          <div onclick="toggleTaskFn3(2)" class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center gap-2.5 cursor-pointer">
+            <span id="f3-chk-2" class="w-4 h-4 rounded border border-slate-600 bg-slate-950 flex items-center justify-center text-[10px]"></span>
+            <span id="f3-txt-2" class="text-white text-[11px]">Созвон с Артуром Шугуровым (Томск) в 15:00</span>
+          </div>
+          <div onclick="toggleTaskFn3(3)" class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center gap-2.5 cursor-pointer">
+            <span id="f3-chk-3" class="w-4 h-4 rounded border border-slate-600 bg-slate-950 flex items-center justify-center text-[10px]"></span>
+            <span id="f3-txt-3" class="text-white text-[11px]">Контроль верстки Бродилки до 18:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENING REVIEW (20:00) -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-indigo-300 flex items-center gap-1.5">
+            <span>🌙</span> Вечерний Отчёт (20:00)
+          </span>
+          <span class="text-[10px] text-slate-400 font-mono">Голосом за 2 мин</span>
+        </div>
+
+        <button onclick="testEveningReport()" class="w-full p-3 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-200 transition-all flex items-start gap-2.5 active:scale-[0.99]">
+          <span class="text-base shrink-0 mt-0.5">🎙️</span>
+          <div>
+            <div class="font-semibold text-indigo-300">Надиктовать вечерний итог дня</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">«Договор отправила, с Шугуровым поговорили, верстальщик задерживает...»</div>
+          </div>
+        </button>
+
+        <div id="evening-report-result" class="hidden p-3 bg-slate-950 rounded-xl border border-indigo-500/30 text-xs space-y-1.5">
+          <div class="text-emerald-400 font-bold text-[11px]">✓ Ассистент обновил статусы и перенес дела:</div>
+          <div class="text-[10px] text-slate-300 space-y-0.5 pl-2 border-l border-slate-800 font-mono">
+            <div>• Договор БФ «Доброе дело» &rarr; Статус: Оплачивается</div>
+            <div>• Шугуров &rarr; Отправка СДЭК записана в задачи</div>
+            <div>• Верстка &rarr; Автоматически перенесена на завтра (11:00)</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 4: УПРАВЛЕНИЕ РАСПИСАНИЕМ (GOOGLE CALENDAR)     -->
+    <!-- ======================================================== -->
+    <section id="fn-view-4" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 4 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">Управление расписанием (Google Calendar)</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Авто-запись встреч при упоминании дат и времени + бронирование слотов глубокой работы под приоритеты.
+        </p>
+      </div>
+
+      <!-- TIMELINE VIEW -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-white font-mono">Сегодня &bull; Четверг, 15 октября</span>
+          <span class="text-[10px] text-emerald-400 font-mono">Синхронизировано</span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <!-- EVENT 1 -->
+          <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-slate-400 font-bold text-[11px]">10:00</span>
+              <span class="text-slate-300 text-[11px]">Школа «Зёрнышки» (2 поток)</span>
+            </div>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">Проведено</span>
+          </div>
+
+          <!-- EVENT 2: DEEP WORK (PROTECTED) -->
+          <div class="p-3 bg-sky-950/50 rounded-xl border border-sky-500/40 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-sky-300 text-[11px] flex items-center gap-1.5">
+                <span>🛡️</span> 14:00 – 16:00: Глубокая работа (Сколково & Финмодель)
+              </div>
+              <div class="text-[10px] text-sky-300/70">Защищенный слот: звонки автоматически отклоняются</div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[9px] font-mono">Фокус</span>
+          </div>
+
+          <!-- EVENT 3 -->
+          <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-amber-400 font-bold text-[11px]">15:00</span>
+              <span class="text-white text-[11px]">Звонок Артуру Шугурову (Томск)</span>
+            </div>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">Календарь</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 5: «ЦИФРОВОЙ МОЗГ» И ПАМЯТЬ (RAG)              -->
+    <!-- ======================================================== -->
+    <section id="fn-view-5" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 5 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">«Цифровой мозг» и память (RAG)</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Вечный архив всех транскриптов и заметок на Google Drive в файлах .md + контекстный поиск по базе знаний.
+        </p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl space-y-3 text-xs">
+        <div class="font-bold text-white flex items-center gap-1.5">
+          <span>🔍</span> Спросите ассистента о прошлых встречах:
+        </div>
+
+        <div class="space-y-1.5">
+          <button onclick="askRagQuestion('shugurov')" class="w-full p-2.5 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-[11px] text-slate-300 flex items-center justify-between">
+            <span>«Что мы обсуждали с Шугуровым из Томска?»</span>
+            <span class="text-sky-400 font-mono text-[9px]">Поиск &rarr;</span>
+          </button>
+          <button onclick="askRagQuestion('stock')" class="w-full p-2.5 text-left rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-[11px] text-slate-300 flex items-center justify-between">
+            <span>«Какая себестоимость и сколько комплектов на складе?»</span>
+            <span class="text-sky-400 font-mono text-[9px]">Поиск &rarr;</span>
+          </button>
+        </div>
+
+        <!-- RAG ANSWER BOX -->
+        <div id="rag-answer-box" class="hidden p-3 bg-slate-950 rounded-xl border border-sky-500/30 space-y-1.5 text-xs">
+          <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono pb-1 border-b border-slate-800">
+            <span>Источник на Google Drive:</span>
+            <span id="rag-file-badge" class="text-sky-400 font-bold">2026_10_14_Встреча.md</span>
+          </div>
+          <div id="rag-quote-text" class="text-slate-200 text-[11px] leading-relaxed">
+            <!-- Injected -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FUNCTION 6: ПРОАКТИВНОСТЬ & КОНТРОЛЬ (HUMAN-IN-THE-LOOP)  -->
+    <!-- ======================================================== -->
+    <section id="fn-view-6" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5">
+        <div class="text-[10px] font-mono text-sky-400 uppercase tracking-wider font-bold">Функция 6 из 6 (Исходное ТЗ)</div>
+        <h2 class="text-base font-bold text-white">Проактивность & Human-in-the-Loop</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Кнопки подтверждения перед записью в календарь/базу + фоновый аудит застрявших задач и накладок.
+        </p>
+      </div>
+
+      <!-- 6.1 CONFIRMATION CARDS -->
+      <div class="glass-card p-4 rounded-2xl space-y-3">
+        <div class="font-bold text-white text-xs flex items-center gap-1.5">
+          <span>🛡️</span> 6.1. Кнопки подтверждения (Защита от ошибок)
+        </div>
+
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-xs">
+          <div class="text-slate-300 text-[11px]">
+            Бот сформировал запись для календаря: <strong>Созвон с Артуром Шугуровым (Томск)</strong> на 16 октября в 15:00.
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="alert('Запись подтверждена!')" class="py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-[11px]">
+              [✅ Записать]
+            </button>
+            <button onclick="alert('Запись отменена!')" class="py-1.5 bg-slate-800 text-slate-400 rounded-lg text-[11px]">
+              [✏️ Отмена]
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6.2 BACKGROUND AUDIT -->
+      <div class="glass-card p-4 rounded-2xl space-y-2.5">
+        <div class="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+          <span>⚠️</span> 6.2. Фоновый аудит рисков и застрявших задач
+        </div>
+
+        <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl space-y-1 text-xs text-slate-300">
+          <div class="font-bold text-amber-200 text-[11px]">• Застрявшая задача:</div>
+          <div class="text-[11px]">«Правка буклета Бродилки» висит у верстальщика без подтверждения 24 часа.</div>
+          <button onclick="alert('Пинг отправлен!')" class="mt-1 text-[10px] text-amber-400 font-bold underline">
+            Отправить автоматическое напоминание &rarr;
           </button>
         </div>
       </div>
 
-      <!-- CHAT STREAM -->
-      <div id="chat-stream-mini" class="space-y-2 text-xs">
-        <div class="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-slate-300 text-xs leading-relaxed">
-          🤖 Екатерина, я слушаю! Чем помочь прямо сейчас?
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- BONUS TAB: 📄 ДОГОВОРЫ ПОСТАВКИ ЗА 30 СЕК (PDF С ПЕЧАТЬЮ) -->
+    <!-- ======================================================== -->
+    <section id="fn-view-7" class="fn-view hidden space-y-4">
+      
+      <div class="glass-card p-4 rounded-2xl space-y-1.5 border-emerald-500/30">
+        <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider font-bold">Специальный модуль Екатерины</div>
+        <h2 class="text-base font-bold text-white">Договоры поставки за 30 сек с синей печатью</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Полный отказ от скриншотов на телефоне и склейки в Заметках. Генерация готового PDF с печатью ИП Моисеева Е.И.
+        </p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 text-[11px] mb-1">Покупатель / Благотворительный фонд:</label>
+          <input id="fast-org" type="text" value="БФ «Доброе дело» (г. Москва)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs">
         </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-1">Комплектов (шт):</label>
+            <input id="fast-qty" type="number" value="20" oninput="recalcFastSum()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs">
+          </div>
+          <div>
+            <label class="block text-slate-400 text-[11px] mb-1">Цена за шт:</label>
+            <input id="fast-price" type="number" value="5500" oninput="recalcFastSum()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs">
+          </div>
+        </div>
+
+        <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 flex justify-between font-mono text-xs">
+          <span class="text-slate-400">Сумма договора:</span>
+          <span class="text-emerald-400 font-bold" id="fast-sum">110 000 руб.</span>
+        </div>
+
+        <button onclick="generateFastPdf()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]">
+          <span>📄</span> Выпустить PDF с печатью ИП Моисеева
+        </button>
       </div>
 
     </section>
 
   </main>
 
-  <!-- ============================================== -->
-  <!-- NATIVE BOTTOM NAVIGATION BAR (iOS TAB BAR)    -->
-  <!-- ============================================== -->
-  <nav class="glass-card fixed bottom-0 left-0 right-0 z-40 border-t border-slate-800/80 safe-bottom max-w-lg mx-auto">
-    <div class="grid grid-cols-5 px-2 py-1.5 text-[10px] font-medium text-center">
-      
-      <button onclick="switchTab('focus')" id="nav-btn-focus" class="tab-nav-btn py-1 flex flex-col items-center text-sky-400 font-semibold">
-        <span class="text-base mb-0.5">☀️</span>
-        <span>Фокус</span>
-      </button>
-
-      <button onclick="switchTab('docs')" id="nav-btn-docs" class="tab-nav-btn py-1 flex flex-col items-center text-slate-400">
-        <span class="text-base mb-0.5">📄</span>
-        <span>Документы</span>
-      </button>
-
-      <button onclick="switchTab('crm')" id="nav-btn-crm" class="tab-nav-btn py-1 flex flex-col items-center text-slate-400">
-        <span class="text-base mb-0.5">📊</span>
-        <span>CRM</span>
-      </button>
-
-      <button onclick="switchTab('position')" id="nav-btn-position" class="tab-nav-btn py-1 flex flex-col items-center text-slate-400">
-        <span class="text-base mb-0.5">🎭</span>
-        <span>Смыслы</span>
-      </button>
-
-      <button onclick="switchTab('chat')" id="nav-btn-chat" class="tab-nav-btn py-1 flex flex-col items-center text-slate-400">
-        <span class="text-base mb-0.5">🎙️</span>
-        <span>Голос</span>
-      </button>
-
-    </div>
-  </nav>
-
-  <!-- MODAL VIEWER (PDF / CRM DETAILS) -->
-  <div id="twa-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-900 border-t sm:border border-slate-800 rounded-t-3xl sm:rounded-3xl max-w-md w-full max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+  <!-- MODAL VIEWER FOR PDF -->
+  <div id="pdf-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
       <div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
-        <h3 class="font-bold text-xs text-white" id="twa-modal-title">Просмотр</h3>
-        <button onclick="closeTwaModal()" class="text-slate-400 hover:text-white px-2 py-1 text-xs font-mono">&times; Закрыть</button>
+        <h3 class="font-bold text-xs text-white">📄 Готовый Договор поставки</h3>
+        <button onclick="closePdfModal()" class="text-slate-400 hover:text-white text-xs font-mono">&times; Закрыть</button>
       </div>
-      <div class="p-5 overflow-y-auto text-xs text-slate-300 leading-relaxed" id="twa-modal-body">
-        <!-- Content -->
-      </div>
-    </div>
-  </div>
-
-  <!-- MASTER LOGIC -->
-  <script>
-    // TELEGRAM WEBAPP INIT
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      tg.enableClosingConfirmation();
-    }
-
-    function haptic(type = 'light') {
-      if (tg?.HapticFeedback) {
-        tg.HapticFeedback.impactOccurred(type);
-      }
-    }
-
-    // TAB SWITCHER
-    function switchTab(tabId) {
-      haptic('light');
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId)?.classList.remove('hidden');
-
-      document.querySelectorAll('.tab-nav-btn').forEach(btn => {
-        btn.classList.remove('text-sky-400', 'font-semibold');
-        btn.classList.add('text-slate-400');
-      });
-      document.getElementById('nav-btn-' + tabId)?.classList.add('text-sky-400', 'font-semibold');
-      document.getElementById('nav-btn-' + tabId)?.classList.remove('text-slate-400');
-    }
-
-    // FOCUS TAB: TASK TOGGLE LOGIC
-    const tasksState = { 1: true, 2: false, 3: false };
-
-    function toggleTask(id) {
-      haptic('medium');
-      tasksState[id] = !tasksState[id];
-
-      const check = document.getElementById('task-check-' + id);
-      const text = document.getElementById('task-text-' + id);
-
-      if (tasksState[id]) {
-        check.className = 'w-5 h-5 rounded-lg border-2 border-emerald-500 bg-emerald-500 text-white flex items-center justify-center text-xs mt-0.5 shrink-0 transition-colors';
-        check.textContent = '✓';
-        text.className = 'font-semibold text-slate-400 line-through';
-      } else {
-        check.className = 'w-5 h-5 rounded-lg border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-xs mt-0.5 shrink-0 transition-colors';
-        check.textContent = '';
-        text.className = 'font-semibold text-white';
-      }
-
-      // Update progress bar
-      const doneCount = Object.values(tasksState).filter(Boolean).length;
-      const pct = Math.round((doneCount / 3) * 100);
-      document.getElementById('focus-progress-text').textContent = `${doneCount} из 3 закрыто (${pct}%)`;
-      document.getElementById('focus-progress-bar').style.width = pct + '%';
-    }
-
-    // DEEP WORK TIMER
-    let timerRunning = false;
-    let timerSeconds = 6320;
-    let timerInterval = null;
-
-    function toggleDeepTimer() {
-      haptic('medium');
-      const btn = document.getElementById('timer-btn');
-      if (!timerRunning) {
-        timerRunning = true;
-        btn.textContent = 'Пауза режима фокуса';
-        btn.className = 'w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-semibold transition-all';
-        timerInterval = setInterval(() => {
-          timerSeconds--;
-          const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
-          const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
-          const s = String(timerSeconds % 60).padStart(2, '0');
-          document.getElementById('deep-timer').textContent = `${h}:${m}:${s}`;
-        }, 1000);
-      } else {
-        timerRunning = false;
-        clearInterval(timerInterval);
-        btn.textContent = 'Продолжить сессию фокуса';
-        btn.className = 'w-full py-2 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 rounded-xl text-xs font-semibold transition-all';
-      }
-    }
-
-    // DOCS CONVEYOR LOGIC
-    function calcDocTotal() {
-      const qty = parseInt(document.getElementById('doc-target-qty').value) || 0;
-      const price = parseInt(document.getElementById('doc-target-price').value) || 0;
-      const total = qty * price;
-      document.getElementById('doc-total-sum').textContent = `${total.toLocaleString('ru-RU')} руб.`;
-    }
-
-    function generateDocFlow() {
-      haptic('heavy');
-      const btn = document.getElementById('btn-gen-doc');
-      btn.innerHTML = '<span>⏳</span> Формирование PDF (1.5 сек)...';
-      btn.disabled = true;
-
-      setTimeout(() => {
-        btn.innerHTML = '<span>✨</span> Сформировать готовый PDF';
-        btn.disabled = false;
-        document.getElementById('generated-preview-card').classList.remove('hidden');
-        openFullPdfModal();
-      }, 1200);
-    }
-
-    function openFullPdfModal() {
-      const org = document.getElementById('doc-target-org').value;
-      const qty = document.getElementById('doc-target-qty').value;
-      const price = document.getElementById('doc-target-price').value;
-      const total = (parseInt(qty) * parseInt(price)).toLocaleString('ru-RU');
-
-      document.getElementById('twa-modal-title').textContent = '📄 Договор поставки № 2026/10-18';
-      document.getElementById('twa-modal-body').innerHTML = `
-        <div class="bg-white text-slate-900 p-5 rounded-2xl font-serif text-[10px] leading-relaxed space-y-2.5 shadow-lg select-text">
+      <div class="p-5 overflow-y-auto text-xs text-slate-300 leading-relaxed space-y-3">
+        <div class="bg-white text-slate-900 p-5 rounded-2xl font-serif text-[10px] leading-relaxed space-y-2 select-text">
           <div class="text-center font-bold text-xs uppercase border-b pb-1.5">ДОГОВОР ПОСТАВКИ № 2026/10-18</div>
           <div class="flex justify-between text-[9px] text-slate-500">
             <span>г. Москва</span>
             <span>15 октября 2026 г.</span>
           </div>
-          <p><strong>Поставщик:</strong> ИП Моисеева Екатерина Игоревна (ОГРНИП 319547600021612, ИНН 541006532813).</p>
-          <p><strong>Покупатель:</strong> ${org}.</p>
-          <p>1. Поставщик обязуется поставить развивающую игровую систему <strong>«скЛАДушка»</strong> в количестве <strong>${qty} шт.</strong> по цене <strong>${price} руб./шт.</strong> Общая сумма: <strong>${total} руб.</strong> (без НДС).</p>
-          <p>2. Товар сертифицирован и предназначен для коррекционно-развивающих занятий с детьми, в том числе с ОВЗ.</p>
+          <p><strong>Поставщик:</strong> Индивидуальный предприниматель Моисеева Екатерина Игоревна (ОГРНИП 319547600021612, ИНН 541006532813).</p>
+          <p><strong>Покупатель:</strong> <span id="modal-buyer-name">БФ «Доброе дело»</span>.</p>
+          <p>1. Поставщик обязуется поставить комплект развивающей методики «скЛАДушка» (полная версия) в количестве <strong>20 шт.</strong> на сумму <strong>110 000 руб.</strong> (НДС не облагается).</p>
           
           <div class="pt-3 border-t grid grid-cols-2 gap-3 mt-2">
             <div>
@@ -515,188 +532,133 @@
             </div>
             <div>
               <div class="font-bold text-[8px] uppercase">Покупатель:</div>
-              <div>${org}</div>
+              <div>БФ «Доброе дело»</div>
               <div class="mt-4 text-[8px] text-slate-400">Подпись: ________ / М.П.</div>
             </div>
           </div>
         </div>
-        <button onclick="closeTwaModal(); alert('PDF отправлен в ваш диалог с ботом!')" class="w-full mt-3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all">
-          📥 Отправить файл в Telegram-чат
+        <button onclick="closePdfModal(); alert('Договор сохранен на Google Drive в 02_Договоры_и_БФ и отправлен в чат Telegram!')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all">
+          📥 Отправить файл в Telegram
         </button>
-      `;
-      document.getElementById('twa-modal').classList.remove('hidden');
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLLER -->
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
     }
 
-    // CRM DATA & FILTER LOGIC
-    const CRM_ENTRIES = [
-      {
-        id: 1,
-        type: 'school',
-        name: 'РКШ «Зёрнышки» (г. Москва)',
-        curator: 'Мария (Директор)',
-        games: '35 шт. (выкуплено)',
-        status: '8 педагогов играют',
-        nextDate: '05 ноября 2026 г.',
-        ltv: 'Запуск 2-го потока обучения учителей'
-      },
-      {
-        id: 2,
-        type: 'school',
-        name: 'Центр ОВЗ «Солнышко» (г. Коломна)',
-        curator: 'Елена (Куратор)',
-        games: '20 шт. (меценат)',
-        status: '5 педагогов играют 3 мес.',
-        nextDate: '25 ноября 2026 г.',
-        ltv: 'Докупка 15 шт. + Курс ДПО'
-      },
-      {
-        id: 3,
-        type: 'patron',
-        name: 'ООО «СибТрансСервис»',
-        curator: 'Иван Сергеевич',
-        games: 'Меценат (г. Новосибирск)',
-        status: 'Спонсировали 250 т.р. в 2024 г.',
-        nextDate: 'Срочно (под Детдом №3)',
-        ltv: 'Готово письмо на 30 игр'
-      },
-      {
-        id: 4,
-        type: 'partner',
-        name: 'Сергей Музыкин (Djuls AI)',
-        curator: 'Сергей (CPO)',
-        games: 'Совместные IT/ИИ клиенты',
-        status: 'Проект сдан заказчику',
-        nextDate: 'Сегодня',
-        ltv: 'Предложить клиенту ИИ-ассистента'
-      }
-    ];
-
-    let currentCrmFilter = 'all';
-
-    function renderCrmCards(list) {
-      const container = document.getElementById('crm-cards-container');
-      container.innerHTML = list.map(item => `
-        <div onclick="openCrmDetailModal(${item.id})" class="glass-card p-3 rounded-2xl flex items-center justify-between active:scale-[0.99] cursor-pointer">
-          <div class="space-y-0.5 text-xs">
-            <div class="font-bold text-white">${item.name}</div>
-            <div class="text-[11px] text-slate-400">${item.curator} &bull; <span class="text-sky-400">${item.games}</span></div>
-          </div>
-          <div class="text-right shrink-0">
-            <span class="text-[10px] px-2 py-0.5 rounded-full ${item.type === 'school' ? 'bg-sky-500/10 text-sky-300 border border-sky-500/30' : item.type === 'patron' ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'}">
-              ${item.type === 'school' ? 'Школа' : item.type === 'patron' ? 'Меценат' : 'Партнер'}
-            </span>
-            <div class="text-[9px] text-slate-500 font-mono mt-1">${item.nextDate}</div>
-          </div>
-        </div>
-      `).join('');
+    function haptic(type = 'light') {
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred(type);
     }
 
-    function filterCrmCategory(cat) {
+    function toggleCheatSheet() {
+      const d = document.getElementById('cheat-sheet-drawer');
+      d.classList.toggle('hidden');
+    }
+
+    function switchFn(num) {
       haptic('light');
-      currentCrmFilter = cat;
-      document.querySelectorAll('.crm-filter-chip').forEach(btn => {
-        btn.className = 'crm-filter-chip px-3 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap text-[11px]';
+      document.querySelectorAll('.fn-view').forEach(v => v.classList.add('hidden'));
+      document.getElementById('fn-view-' + num)?.classList.remove('hidden');
+
+      document.querySelectorAll('.fn-tab-btn').forEach((b, idx) => {
+        if (idx === (num - 1)) {
+          b.className = 'fn-tab-btn px-3 py-1.5 rounded-xl bg-sky-500 text-white font-semibold whitespace-nowrap shadow-sm text-[11px]';
+        } else {
+          b.className = 'fn-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap text-[11px]';
+        }
       });
-      document.getElementById('crm-chip-' + cat).className = 'crm-filter-chip px-3 py-1 rounded-lg bg-sky-500 text-white font-semibold whitespace-nowrap text-[11px]';
-
-      const filtered = (cat === 'all') ? CRM_ENTRIES : CRM_ENTRIES.filter(e => e.type === cat);
-      renderCrmCards(filtered);
     }
 
-    function filterCrmTable() {
-      const q = document.getElementById('crm-search-input').value.toLowerCase();
-      let list = (currentCrmFilter === 'all') ? CRM_ENTRIES : CRM_ENTRIES.filter(e => e.type === currentCrmFilter);
-      if (q) {
-        list = list.filter(item => item.name.toLowerCase().includes(q) || item.curator.toLowerCase().includes(q));
-      }
-      renderCrmCards(list);
-    }
-
-    function openCrmDetailModal(id) {
+    // FUNCTION 1 LOGIC
+    function testVoiceMemo() {
       haptic('medium');
-      const item = CRM_ENTRIES.find(x => x.id === id);
-      if (!item) return;
-
-      document.getElementById('twa-modal-title').textContent = item.name;
-      document.getElementById('twa-modal-body').innerHTML = `
-        <div class="space-y-3 text-xs">
-          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
-            <div>• <strong>Куратор:</strong> ${item.curator}</div>
-            <div>• <strong>Объем внедрения:</strong> ${item.games}</div>
-            <div>• <strong>Текущий статус:</strong> <span class="text-emerald-400">${item.status}</span></div>
-            <div>• <strong>Дата следующего контакта:</strong> <span class="text-amber-400 font-mono">${item.nextDate}</span></div>
-          </div>
-          <div class="p-3 bg-sky-950/40 rounded-xl border border-sky-500/30 text-sky-300">
-            💡 <strong>Точка роста (LTV):</strong> ${item.ltv}
-          </div>
-          <button onclick="closeTwaModal(); alert('Звонок запланирован!')" class="w-full py-2.5 bg-sky-500 text-white font-bold rounded-xl">
-            📞 Назначить созвон
-          </button>
-        </div>
-      `;
-      document.getElementById('twa-modal').classList.remove('hidden');
+      document.getElementById('voice-memo-result').classList.remove('hidden');
     }
 
-    // 3D POSITIONING LOGIC
-    const POS_DATA = {
-      gr: `«Моисеева Екатерина Игоревна — автор и разработчик запатентованной отечественной Phygital-методологии "скЛАДушка", член комиссий ТПП РФ по поддержке семейного предпринимательства и инклюзии. Проект решает задачи комплексной абилитации детей с ОВЗ через сенсорно-моторные игры, формируя фундамент учебной самостоятельности».`,
-      b2b: `«Екатерина Моисеева — основатель бренда развивающих и коммуникативных игр "скЛАДушка" и "ЛАДные разговоры". Поставляем готовые решения для корпоративных подарков со смыслом (КСО/HR) и внедряем образовательные курсы для частных школ с программами ДПО для педагогов».`,
-      b2c: `«Катя Моисеева — мама, автор игр, которые возвращают в семью теплое общение. Игра "скЛАДушка" учит ребенка одеваться, убирать за собой и дружить без криков и слез, а игра "ЛАДные разговоры" помогает родителям и детям слышать друг друга без смартфонов».`
-    };
+    function testMeetingDigest() {
+      haptic('medium');
+      document.getElementById('meeting-digest-result').classList.remove('hidden');
+    }
 
-    let activePosTab = 'gr';
-
-    function setPosTab(tab) {
+    // FUNCTION 2 LOGIC
+    function setTaskTab(tab) {
       haptic('light');
-      activePosTab = tab;
-      document.querySelectorAll('.pos-btn').forEach(b => {
-        b.className = 'pos-btn py-1.5 rounded-lg text-slate-400 text-xs';
-      });
-      document.getElementById('tab-btn-' + tab).className = 'pos-btn py-1.5 rounded-lg bg-sky-500 text-white font-semibold text-xs';
-      document.getElementById('pos-text-box').textContent = POS_DATA[tab];
-    }
-
-    function copyPosText() {
-      haptic('medium');
-      navigator.clipboard.writeText(POS_DATA[activePosTab]).then(() => {
-        alert('Текст скопирован в буфер обмена телефона!');
-      });
-    }
-
-    // QUICK CHAT SCENARIOS
-    function simulateScenarioChat(type) {
-      haptic('medium');
-      const stream = document.getElementById('chat-stream-mini');
-      if (type === 'call') {
-        stream.innerHTML += `
-          <div class="p-2.5 rounded-xl bg-sky-600 text-white text-[11px] self-end">
-            🎙️ [Голосовое]: «Запиши созвон со школой Зёрнышки, в ноябре запускают 2 поток на 15 учителей»
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-[11px]">
-            🤖 Зафиксировано! Карточка школы «Зёрнышки» обновлена в CRM. Уведомление о 2 потоке поставлено на 1 ноября.
-          </div>
-        `;
+      if (tab === 'spheres') {
+        document.getElementById('btn-tab-spheres').className = 'py-1.5 rounded-lg bg-sky-500 text-white font-semibold';
+        document.getElementById('btn-tab-delegation').className = 'py-1.5 rounded-lg text-slate-400';
+        document.getElementById('tasks-spheres-box').classList.remove('hidden');
+        document.getElementById('tasks-delegation-box').classList.add('hidden');
       } else {
-        stream.innerHTML += `
-          <div class="p-2.5 rounded-xl bg-sky-600 text-white text-[11px] self-end">
-            🎙️ [Голосовое]: «Напомни завтра в 11:00 узнать у типографии цену коробки от 30 штук»
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-[11px]">
-            🤖 Задача внесена в Утренний Фокус на завтра на 11:00.
-          </div>
-        `;
+        document.getElementById('btn-tab-delegation').className = 'py-1.5 rounded-lg bg-sky-500 text-white font-semibold';
+        document.getElementById('btn-tab-spheres').className = 'py-1.5 rounded-lg text-slate-400';
+        document.getElementById('tasks-delegation-box').classList.remove('hidden');
+        document.getElementById('tasks-spheres-box').classList.add('hidden');
       }
     }
 
-    function closeTwaModal() {
-      document.getElementById('twa-modal').classList.add('hidden');
+    // FUNCTION 3 LOGIC
+    const fn3State = { 1: true, 2: false, 3: false };
+    function toggleTaskFn3(id) {
+      haptic('medium');
+      fn3State[id] = !fn3State[id];
+      const chk = document.getElementById('f3-chk-' + id);
+      const txt = document.getElementById('f3-txt-' + id);
+
+      if (fn3State[id]) {
+        chk.className = 'w-4 h-4 rounded border border-emerald-500 bg-emerald-500 text-white flex items-center justify-center text-[10px]';
+        chk.textContent = '✓';
+        txt.className = 'text-slate-400 line-through text-[11px]';
+      } else {
+        chk.className = 'w-4 h-4 rounded border border-slate-600 bg-slate-950 flex items-center justify-center text-[10px]';
+        chk.textContent = '';
+        txt.className = 'text-white text-[11px]';
+      }
     }
 
-    // INIT
-    window.addEventListener('DOMContentLoaded', () => {
-      renderCrmCards(CRM_ENTRIES);
-      setPosTab('gr');
-    });
+    function testEveningReport() {
+      haptic('medium');
+      document.getElementById('evening-report-result').classList.remove('hidden');
+    }
+
+    // FUNCTION 5 LOGIC (RAG)
+    function askRagQuestion(type) {
+      haptic('medium');
+      const box = document.getElementById('rag-answer-box');
+      const badge = document.getElementById('rag-file-badge');
+      const text = document.getElementById('rag-quote-text');
+
+      if (type === 'shugurov') {
+        badge.textContent = 'Дневник_Проекта_Складушка.md // Раздел 6';
+        text.innerHTML = '«Артур Шугуров («Дикобраз», Томск) — 20+ лет стажа в педагогике, открывает реабилитационный центр. Выделяем <strong>2 тестовых комплекта</strong> для работы с детьми под запись отзывов и совместный контент».';
+      } else {
+        badge.textContent = 'Дневник_Проекта_Складушка.md // Раздел 2';
+        text.innerHTML = '«На складе заморожено ~1 400 комплектов: 1 100 полных (себестоимость 2 200 руб., розница 5 500 руб.) и 300 упрощенных (себестоимость 500–750 руб., сброс по 1 200–1 500 руб.)».';
+      }
+      box.classList.remove('hidden');
+    }
+
+    // BONUS: FAST PDF GENERATION
+    function recalcFastSum() {
+      const q = parseInt(document.getElementById('fast-qty').value) || 0;
+      const p = parseInt(document.getElementById('fast-price').value) || 0;
+      document.getElementById('fast-sum').textContent = `${(q * p).toLocaleString('ru-RU')} руб.`;
+    }
+
+    function generateFastPdf() {
+      haptic('heavy');
+      document.getElementById('modal-buyer-name').textContent = document.getElementById('fast-org').value;
+      document.getElementById('pdf-modal').classList.remove('hidden');
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdf-modal').classList.add('hidden');
+    }
   </script>
 </body>
 </html>
