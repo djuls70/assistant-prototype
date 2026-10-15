@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ИИ-Ассистент Екатерины Моисеевой // Прототип Djuls AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+            },
+            tg: {
+              bg: '#0f172a',
+              card: '#1e293b',
+              bubble: '#334155',
+              accent: '#38bdf8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .pulse-glow { box-shadow: 0 0 25px rgba(56, 189, 248, 0.35); }
+    @keyframes pulse-wave {
+      0%, 100% { height: 8px; }
+      50% { height: 28px; }
+    }
+    .wave-bar { animation: pulse-wave 1s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- TOP HEADER -->
+  <header class="glass sticky top-0 z-50 border-b border-slate-800/80 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-lg shadow-lg shadow-sky-500/20">
+        ⚡
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-bold text-base tracking-tight text-white">Екатерина Моисеева</h1>
+          <span class="px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/30 rounded-full">Executive OS</span>
+        </div>
+        <p class="text-xs text-slate-400">Персональный ИИ-Ассистент &bull; Концепт Djuls AI Studio</p>
+      </div>
+    </div>
+
+    <!-- MAIN NAV TABS -->
+    <nav class="hidden md:flex items-center p-1 bg-slate-900/90 rounded-xl border border-slate-800/80 text-xs font-medium">
+      <button onclick="switchScreen('telegram')" id="nav-telegram" class="nav-btn px-4 py-2 rounded-lg transition-all text-white bg-sky-500 font-semibold shadow-sm">
+        💬 Telegram-Пульт
+      </button>
+      <button onclick="switchScreen('rituals')" id="nav-rituals" class="nav-btn px-4 py-2 rounded-lg transition-all text-slate-400 hover:text-white">
+        ☀️ Ритуалы (09:00 / 20:00)
+      </button>
+      <button onclick="switchScreen('documents')" id="nav-documents" class="nav-btn px-4 py-2 rounded-lg transition-all text-slate-400 hover:text-white">
+        📄 Конвейер Документов
+      </button>
+      <button onclick="switchScreen('crm')" id="nav-crm" class="nav-btn px-4 py-2 rounded-lg transition-all text-slate-400 hover:text-white">
+        📊 Многоконтурная CRM
+      </button>
+      <button onclick="switchScreen('calendar')" id="nav-calendar" class="nav-btn px-4 py-2 rounded-lg transition-all text-slate-400 hover:text-white">
+        📅 Google Календарь
+      </button>
+      <button onclick="switchScreen('rag')" id="nav-rag" class="nav-btn px-4 py-2 rounded-lg transition-all text-slate-400 hover:text-white">
+        🧠 Цифровой Мозг (RAG)
+      </button>
+    </nav>
+
+    <!-- RIGHT BADGE -->
+    <div class="flex items-center gap-3">
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        Агент активен в сети
+      </div>
+      <a href="https://djuls.ru" target="_blank" class="text-xs font-mono text-slate-400 hover:text-sky-400 transition-colors">djuls.ru &rarr;</a>
+    </div>
+  </header>
+
+  <!-- MOBILE SUBNAV -->
+  <div class="md:hidden flex overflow-x-auto gap-2 p-2 bg-slate-900 border-b border-slate-800 text-xs">
+    <button onclick="switchScreen('telegram')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-sky-500 text-white font-medium">Telegram-Пульт</button>
+    <button onclick="switchScreen('rituals')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">Ритуалы</button>
+    <button onclick="switchScreen('documents')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">Документы</button>
+    <button onclick="switchScreen('crm')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">CRM</button>
+    <button onclick="switchScreen('calendar')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">Календарь</button>
+    <button onclick="switchScreen('rag')" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300">Цифровой Мозг</button>
+  </div>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: TELEGRAM CHAT & VOICE INTERFACE  -->
+    <!-- ========================================== -->
+    <section id="screen-telegram" class="screen-view flex-1 flex flex-col lg:flex-row gap-6">
+      
+      <!-- LEFT: SCENARIO LAUNCHER -->
+      <div class="lg:w-80 flex flex-col gap-4">
+        <div class="glass p-5 rounded-2xl border border-slate-800">
+          <h2 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
+            <span>🎯</span> Тестовые сценарии (User Stories)
+          </h2>
+          <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+            Нажимайте кнопки ниже, чтобы симулировать голосовые запросы Екатерины и проверять работу ассистента:
+          </p>
+          <div class="flex flex-col gap-2.5">
+            <button onclick="playScenario('contract')" class="w-full text-left p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-sky-500/50 transition-all text-xs group">
+              <div class="font-semibold text-white group-hover:text-sky-400 flex items-center justify-between">
+                <span>1. Срочный договор поставки</span>
+                <span>⚡</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">«Нужен договор для фонда "Доброе дело", 20 игр Складушки»</div>
+            </button>
+
+            <button onclick="playScenario('call_sync')" class="w-full text-left p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-sky-500/50 transition-all text-xs group">
+              <div class="font-semibold text-white group-hover:text-sky-400 flex items-center justify-between">
+                <span>2. Итог звонка с центром ОВЗ</span>
+                <span>📞</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">«Поговорила с "Солнышком", 5 педагогов, перезвонить 25 ноября»</div>
+            </button>
+
+            <button onclick="playScenario('positioning')" class="w-full text-left p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-sky-500/50 transition-all text-xs group">
+              <div class="font-semibold text-white group-hover:text-sky-400 flex items-center justify-between">
+                <span>3. Справка для ТПП (Спектр GR)</span>
+                <span>🏛️</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">«Сделай текст обо мне для круглого стола по инклюзии»</div>
+            </button>
+
+            <button onclick="playScenario('morning_radar')" class="w-full text-left p-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-sky-500/50 transition-all text-xs group">
+              <div class="font-semibold text-white group-hover:text-sky-400 flex items-center justify-between">
+                <span>4. Утренний Радар Фокуса (09:00)</span>
+                <span>☀️</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Проактивный пуш с ключевыми задачами и дедлайнами</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-2xl border border-slate-800/80 text-xs text-slate-400 space-y-2">
+          <div class="font-semibold text-white flex items-center gap-1.5">
+            <span class="text-sky-400">🛡️</span> Механика Human-in-the-Loop
+          </div>
+          <p class="leading-relaxed">
+            Ассистент никогда не меняет данные молча. Он формирует карточку подтверждения с кнопками <code class="text-sky-400 font-mono">[✅ Подтвердить]</code> / <code class="text-rose-400 font-mono">[✏️ Отмена]</code>.
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT: TELEGRAM DEVICE CHAT -->
+      <div class="flex-1 glass rounded-3xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl relative min-h-[550px]">
+        <!-- TELEGRAM CHAT BAR -->
+        <div class="bg-slate-900/95 border-b border-slate-800 px-5 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-600 flex items-center justify-center font-bold text-white text-base shadow">
+                🤖
+              </div>
+              <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-white flex items-center gap-1.5">
+                ИИ-Ассистент Екатерины
+                <span class="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-400 font-mono">bot</span>
+              </div>
+              <div class="text-xs text-emerald-400 flex items-center gap-1">
+                <span>●</span> готов к голосовым поручениям
+              </div>
+            </div>
+          </div>
+          <button onclick="clearChat()" class="text-xs text-slate-400 hover:text-slate-200 transition-colors px-2 py-1 rounded bg-slate-800/60">
+            Очистить чат
+          </button>
+        </div>
+
+        <!-- CHAT MESSAGES BODY -->
+        <div id="chat-stream" class="flex-1 p-5 overflow-y-auto flex flex-col gap-4 text-xs">
+          <!-- WELCOME MESSAGE -->
+          <div class="flex items-start gap-2.5 max-w-[85%]">
+            <div class="w-7 h-7 rounded-full bg-sky-600/40 flex items-center justify-center text-xs shrink-0">🤖</div>
+            <div class="p-4 rounded-2xl rounded-tl-sm bg-slate-800/90 border border-slate-700/60 text-slate-200 shadow-sm leading-relaxed space-y-2">
+              <p>Добро пожаловать, Екатерина! Я ваш персональный операционный управляющий.</p>
+              <p class="text-slate-400">Надиктовывайте мысли, созвоны или поручения. Чтобы протестировать функции, выберите сценарий слева или нажмите микрофон внизу.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- VOICE INPUT SIMULATION BAR -->
+        <div class="p-3.5 bg-slate-900/95 border-t border-slate-800 flex items-center gap-3">
+          <button onclick="toggleVoiceSim()" id="mic-btn" class="w-11 h-11 rounded-2xl bg-sky-500 hover:bg-sky-400 text-white flex items-center justify-center text-lg transition-transform active:scale-95 shadow-lg shadow-sky-500/20 shrink-0">
+            🎤
+          </button>
+          
+          <div id="voice-wave" class="hidden flex-1 items-center gap-1.5 px-4 py-2.5 bg-slate-800/80 rounded-xl border border-sky-500/30">
+            <span class="text-xs text-sky-400 font-medium mr-2">Запись голосового...</span>
+            <div class="w-1 h-3 bg-sky-400 rounded-full wave-bar" style="animation-delay: 0.1s"></div>
+            <div class="w-1 h-5 bg-sky-400 rounded-full wave-bar" style="animation-delay: 0.2s"></div>
+            <div class="w-1 h-7 bg-sky-400 rounded-full wave-bar" style="animation-delay: 0.3s"></div>
+            <div class="w-1 h-4 bg-sky-400 rounded-full wave-bar" style="animation-delay: 0.4s"></div>
+            <div class="w-1 h-6 bg-sky-400 rounded-full wave-bar" style="animation-delay: 0.5s"></div>
+            <button onclick="stopVoiceSim()" class="ml-auto text-xs bg-sky-500 text-white px-2.5 py-1 rounded-md font-semibold hover:bg-sky-400">Отправить</button>
+          </div>
+
+          <div id="input-box" class="flex-1 flex items-center gap-2">
+            <input id="user-input" type="text" placeholder="Напишите команду или наговорите голосом..." onkeydown="handleEnter(event)"
+                   class="w-full bg-slate-800/90 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500">
+            <button onclick="sendManualText()" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 flex items-center justify-center text-sm transition-colors border border-slate-700">
+              ➤
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: DAILY RITUALS (09:00 & 20:00)    -->
+    <!-- ========================================== -->
+    <section id="screen-rituals" class="screen-view hidden flex-1 flex flex-col gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1">
+        
+        <!-- MORNING FOCUS (09:00) -->
+        <div class="glass p-6 rounded-3xl border border-slate-800 flex flex-col gap-5">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">☀️</span>
+              <div>
+                <h3 class="font-bold text-base text-white">Утренний Фокус (09:00)</h3>
+                <p class="text-xs text-slate-400">3 приоритета дня + защита времени от хаоса</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20">Каждое утро</span>
+          </div>
+
+          <!-- TOP 3 PRIORITIES -->
+          <div class="space-y-3">
+            <div class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Главные приоритеты дня:</div>
+            
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-3">
+              <input type="checkbox" checked class="mt-0.5 rounded text-sky-500 focus:ring-0">
+              <div class="text-xs">
+                <div class="font-medium text-white line-through text-slate-500">Отправить готовый PDF-договор в БФ «Доброе дело»</div>
+                <div class="text-[11px] text-emerald-400 mt-0.5">✓ Сформирован ассистентом в 09:15</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-3">
+              <input type="checkbox" class="mt-0.5 rounded text-sky-500 focus:ring-0">
+              <div class="text-xs">
+                <div class="font-medium text-white">Звонок Артуру Шугурову («Дикобраз», Томск)</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Согласовать отправку 2 тестовых комплектов на реабилитационный центр</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-3">
+              <input type="checkbox" class="mt-0.5 rounded text-sky-500 focus:ring-0">
+              <div class="text-xs">
+                <div class="font-medium text-white">Контроль верстки «Бродилки» (Папка «Ожидания»)</div>
+                <div class="text-[11px] text-amber-400 mt-0.5">⚠️ Дедлайн сдачи этапа верстальщиком — сегодня до 18:00</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DEEP WORK SLOT -->
+          <div class="p-4 rounded-xl bg-sky-500/10 border border-sky-500/20 text-xs flex items-center justify-between">
+            <div>
+              <div class="font-bold text-sky-400 flex items-center gap-1.5">
+                <span>🛡️</span> Защищенный слот в Google Календаре
+              </div>
+              <div class="text-slate-300 mt-0.5">14:00 – 16:00: Глубокая работа над презентацией для Сколково</div>
+            </div>
+            <span class="text-[11px] px-2 py-1 rounded bg-sky-500/20 text-sky-300 font-mono">Забронировано</span>
+          </div>
+        </div>
+
+        <!-- EVENING REPORT (20:00) -->
+        <div class="glass p-6 rounded-3xl border border-slate-800 flex flex-col gap-5">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🌙</span>
+              <div>
+                <h3 class="font-bold text-base text-white">Вечерний Сбор Итогов (20:00)</h3>
+                <p class="text-xs text-slate-400">Голосовая разгрузка головы перед сном</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Ежевечерне</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300 space-y-2">
+            <div class="font-semibold text-white flex items-center gap-1.5">
+              <span>🎙️</span> Как это работает для Екатерины:
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              В 20:00 бот присылает запрос: <i>«Катя, что сегодня закрыли, а что переносим?»</i>. Вы надиктовываете 2 минуты голосового, ассистент сам обновляет таблицу и переносит хвосты на завтра.
+            </p>
+          </div>
+
+          <!-- SIMULATED EVENING VOICE RECORDING -->
+          <div class="p-4 rounded-2xl bg-slate-900 border border-indigo-500/30 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-indigo-400">Пример вечерней голосовой заметки:</span>
+              <span class="text-slate-500 font-mono">01:42</span>
+            </div>
+            <div class="text-xs text-slate-300 italic bg-slate-950 p-3 rounded-lg border border-slate-800">
+              «Договор в фонд отправила, Шугурову набрала — он в восторге, адрес для СДЭК скинул в телегу. Дизайнер не успевает, перенеси бродилку на пятницу. Завтра хочу с утра созвониться с Ершовой по Марфе».
+            </div>
+            <div class="text-[11px] text-emerald-400 font-mono flex items-center gap-1.5 pt-1">
+              <span>✓</span> Статусы обновлены &bull; СДЭК записан в задачи &bull; Бродилка перенесена
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: DOCUMENT CONVEYOR & 3D POSITIONING -->
+    <!-- ========================================== -->
+    <section id="screen-documents" class="screen-view hidden flex-1 flex flex-col gap-6">
+      
+      <!-- TOP: 3D POSITIONING SWITCHER -->
+      <div class="glass p-5 rounded-3xl border border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <span>🎭</span> Матрица 3D-Позиционирования (Адаптация смыслов)
+            </h3>
+            <p class="text-xs text-slate-400">Переключение языка самопрезентации под разные целевые аудитории</p>
+          </div>
+          <div class="flex p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs font-medium">
+            <button onclick="setPositioning('gr')" id="pos-gr" class="pos-tab px-3 py-1.5 rounded-lg bg-sky-500 text-white font-semibold">
+              🏛️ Спектр GR
+            </button>
+            <button onclick="setPositioning('b2b')" id="pos-b2b" class="pos-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">
+              💼 Спектр B2B
+            </button>
+            <button onclick="setPositioning('b2c')" id="pos-b2c" class="pos-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">
+              👨‍👩‍👧 Спектр B2C
+            </button>
+          </div>
+        </div>
+
+        <div id="positioning-content" class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 leading-relaxed space-y-2">
+          <!-- DYNAMIC CONTENT (GR by default) -->
+        </div>
+      </div>
+
+      <!-- BOTTOM: 30-SEC DOCUMENT GENERATOR WITH LIVE PDF PREVIEW -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+        
+        <!-- GENERATOR CONTROLS -->
+        <div class="lg:col-span-5 glass p-6 rounded-3xl border border-slate-800 flex flex-col gap-4">
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <span>⚙️</span> Генератор Договоров и КП за 30 сек
+          </h3>
+          <p class="text-xs text-slate-400">Формирует готовый документ с автоматической подстановкой факсимиле печати и подписи ИП Моисеева Е.И.</p>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">Тип документа:</label>
+              <select id="doc-type" onchange="updateDocPreview()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+                <option value="contract_bf">Договор поставки развивающих игр (Благотворительный фонд)</option>
+                <option value="kp_b2b">Коммерческое предложение (B2B Корпоративные подарки)</option>
+                <option value="petition_letter">Официальное Письмо-прошение от детского дома</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1">Контрагент / Организация:</label>
+              <input id="doc-org" type="text" value="Благотворительный фонд «Доброе дело»" oninput="updateDocPreview()"
+                     class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 mb-1">Количество (шт.):</label>
+                <input id="doc-qty" type="number" value="20" oninput="updateDocPreview()"
+                       class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Цена за ед. (руб.):</label>
+                <input id="doc-price" type="number" value="5500" oninput="updateDocPreview()"
+                       class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+              </div>
+            </div>
+          </div>
+
+          <button onclick="triggerPdfExport()" class="mt-auto w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2">
+            <span>📥</span> Скачать готовый PDF с печатью
+          </button>
+        </div>
+
+        <!-- LIVE MOCK DOCUMENT VIEWER -->
+        <div class="lg:col-span-7 bg-white text-slate-900 p-8 rounded-3xl shadow-2xl flex flex-col justify-between font-serif text-[11px] leading-relaxed relative overflow-hidden min-h-[420px]">
+          <div>
+            <div class="text-center font-bold text-sm tracking-wide uppercase border-b-2 border-slate-900 pb-2 mb-4" id="preview-title">
+              ДОГОВОР ПОСТАВКИ ТОВАРА № 2026/10-18
+            </div>
+            
+            <div class="flex justify-between text-[10px] mb-4 text-slate-600">
+              <span>г. Москва</span>
+              <span>15 октября 2026 г.</span>
+            </div>
+
+            <div class="space-y-2 text-justify">
+              <p>
+                <strong>Индивидуальный предприниматель Моисеева Екатерина Игоревна</strong> (ОГРНИП 319547600021612, ИНН 541006532813), именуемая в дальнейшем «Поставщик», с одной стороны, и <strong id="preview-org">Благотворительный фонд «Доброе дело»</strong>, именуемый в дальнейшем «Покупатель», заключили настоящий Договор о нижеследующем:
+              </p>
+              <p>
+                1. Поставщик обязуется передать в собственность Покупателю комплект развивающих игровых пособий <strong>«скЛАДушка»</strong> в количестве <strong id="preview-qty">20</strong> шт. по цене <strong id="preview-price">5 500</strong> руб./шт. Общая сумма договора составляет <strong id="preview-total">110 000 (Сто десять тысяч) рублей 00 копеек</strong> (НДС не облагается).
+              </p>
+              <p>
+                2. Товар предназначен для целевой передачи в детские социальные учреждения и коррекционные центры в рамках благотворительной программы поддержки детей с ОВЗ.
+              </p>
+            </div>
+          </div>
+
+          <!-- SIGNATURES AND STAMP SECTION -->
+          <div class="pt-6 border-t border-slate-300 mt-6 grid grid-cols-2 gap-4 relative">
+            <div>
+              <div class="font-bold text-[10px] uppercase text-slate-700">Поставщик:</div>
+              <div class="text-[9px] text-slate-600 mt-1">ИП Моисеева Е. И.<br>ИНН 541006532813</div>
+              <!-- SIMULATED BLUE STAMP & SIGNATURE -->
+              <div class="mt-2 relative w-28 h-20 border-2 border-dashed border-blue-600 rounded-full flex flex-col items-center justify-center text-[7px] font-mono text-blue-700 font-bold rotate-[-6deg] bg-blue-50/40 select-none">
+                <span>РОССИЙСКАЯ ФЕДЕРАЦИЯ</span>
+                <span class="text-[8px] my-0.5">★ ИП МОИСЕЕВА Е.И. ★</span>
+                <span class="text-[6px]">ОГРНИП 319547600021612</span>
+                <div class="absolute inset-0 flex items-center justify-center font-sans italic text-blue-900 font-bold text-sm tracking-widest opacity-80 rotate-12">
+                  E.Moiseeva
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="font-bold text-[10px] uppercase text-slate-700">Покупатель:</div>
+              <div class="text-[9px] text-slate-600 mt-1" id="preview-buyer-sign">БФ «Доброе дело»<br>Подпись: ______________ / М.П.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 4: MULTI-CONTOUR CRM («СИРЕМКА»)    -->
+    <!-- ========================================== -->
+    <section id="crm" class="screen-view hidden flex-1 flex flex-col gap-5">
+      
+      <!-- CRM HEADER & FILTER BAR -->
+      <div class="glass p-5 rounded-3xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-bold text-base text-white flex items-center gap-2">
+            <span>📊</span> Единая Многоконтурная CRM (Радар обязательств)
+          </h3>
+          <p class="text-xs text-slate-400">Голосовое обновление, LTV-движок и напоминания по датам договоренностей</p>
+        </div>
+
+        <!-- 4 CONTOUR TABS -->
+        <div class="flex overflow-x-auto p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs font-medium">
+          <button onclick="setCrmTab('schools')" id="crm-tab-schools" class="crm-tab px-3 py-1.5 rounded-lg bg-sky-500 text-white font-semibold">
+            🏫 Учреждения (скЛАДушка)
+          </button>
+          <button onclick="setCrmTab('patrons')" id="crm-tab-patrons" class="crm-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">
+            🤝 Меценаты и Фонды
+          </button>
+          <button onclick="setCrmTab('partners')" id="crm-tab-partners" class="crm-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">
+            🚀 Партнеры & Лиды Djuls AI
+          </button>
+          <button onclick="setCrmTab('team')" id="crm-tab-team" class="crm-tab px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">
+            ⏳ Команда & Ожидания
+          </button>
+        </div>
+      </div>
+
+      <!-- SMART MATCHER BANNER -->
+      <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-base">💡</span>
+          <span class="text-amber-200">
+            <strong>Умный Стыковщик:</strong> Детдом №3 (г. Новосибирск) прислал письмо на 30 игр &bull; В базе есть меценат <strong>ООО «СибТранс»</strong> (г. Новосибирск).
+          </span>
+        </div>
+        <button onclick="alert('Ассистент сформировал проект персонального обращения к ООО СибТранс и прикрепил письмо детдома!')" class="px-3 py-1 bg-amber-500 text-slate-950 rounded-lg font-bold text-xs hover:bg-amber-400 transition-colors shrink-0">
+          Сгенерировать обращение &rarr;
+        </button>
+      </div>
+
+      <!-- CRM DATA TABLE -->
+      <div class="glass rounded-3xl border border-slate-800 overflow-hidden flex-1 flex flex-col">
+        <div class="overflow-x-auto flex-1">
+          <table class="w-full text-left text-xs" id="crm-table">
+            <thead class="bg-slate-900/90 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+              <tr id="crm-thead-tr">
+                <!-- DYNAMIC HEADERS -->
+              </tr>
+            </thead>
+            <tbody id="crm-tbody" class="divide-y divide-slate-800 text-slate-200">
+              <!-- DYNAMIC ROWS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 5: GOOGLE CALENDAR & TIME SLOTS     -->
+    <!-- ========================================== -->
+    <section id="screen-calendar" class="screen-view hidden flex-1 flex flex-col gap-5">
+      <div class="glass p-5 rounded-3xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base text-white flex items-center gap-2">
+            <span>📅</span> Управление расписанием (Google Calendar)
+          </h3>
+          <p class="text-xs text-slate-400">Автоматическая фиксация встреч из голоса + бронирование слотов глубокой работы</p>
+        </div>
+        <button onclick="alert('Встреча забронирована и синхронизирована с Google Calendar!')" class="px-4 py-2 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-400">
+          + Назначить встречу
+        </button>
+      </div>
+
+      <!-- CALENDAR TIMELINE VIEW -->
+      <div class="glass rounded-3xl border border-slate-800 p-6 flex-1 flex flex-col gap-3">
+        <div class="text-xs font-bold text-slate-400 uppercase font-mono mb-2">Сегодня: Четверг, 15 октября 2026 г.</div>
+        
+        <div class="space-y-2.5">
+          <!-- EVENT 1 -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-sky-400 font-bold">10:00 - 10:45</span>
+              <div>
+                <div class="font-semibold text-white">Созвон с семейной школой РКШ «Зёрнышки»</div>
+                <div class="text-slate-400 text-[11px]">Согласование программы обучения второго потока учителей на ноябрь</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px]">Завершено</span>
+          </div>
+
+          <!-- EVENT 2 (DEEP WORK) -->
+          <div class="p-3.5 rounded-xl bg-sky-950/40 border border-sky-500/40 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-sky-300 font-bold">14:00 - 16:00</span>
+              <div>
+                <div class="font-semibold text-sky-200 flex items-center gap-1.5">
+                  <span>🛡️</span> Блок «Глубокая работа»: Финмодель & Сколково
+                </div>
+                <div class="text-sky-300/70 text-[11px]">Защищенный слот без звонков — ассистент отклоняет входящие встречи</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-mono">Фокус</span>
+          </div>
+
+          <!-- EVENT 3 -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-amber-400 font-bold">17:00 - 17:30</span>
+              <div>
+                <div class="font-semibold text-white">Контрольный звонок верстальщику (Adobe Illustrator)</div>
+                <div class="text-slate-400 text-[11px]">Приемка макета «Бродилки» с исправленными цифрами 0–9</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px]">Предстоит</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 6: RAG DIGITAL BRAIN & DRIVE ARCHIVE -->
+    <!-- ========================================== -->
+    <section id="screen-rag" class="screen-view hidden flex-1 flex flex-col gap-5">
+      <div class="glass p-5 rounded-3xl border border-slate-800">
+        <h3 class="font-bold text-base text-white flex items-center gap-2 mb-1">
+          <span>🧠</span> «Цифровой Мозг» и RAG-Поиск по Google Drive
+        </h3>
+        <p class="text-xs text-slate-400 mb-4">Все созвоны и заметки хранятся в формате .md и мгновенно доступны через семантический поиск</p>
+
+        <!-- RAG SEARCH INPUT -->
+        <div class="relative">
+          <input id="rag-query" type="text" placeholder="Спросите ассистента: например, «Что решили по благотворительному фонду?»"
+                 onkeydown="if(event.key==='Enter') searchRag()"
+                 class="w-full bg-slate-900 border border-slate-700 rounded-2xl pl-11 pr-24 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500">
+          <span class="absolute left-4 top-3.5 text-slate-500 text-sm">🔍</span>
+          <button onclick="searchRag()" class="absolute right-2 top-2 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-white rounded-xl text-xs font-semibold transition-colors">
+            Найти
+          </button>
+        </div>
+      </div>
+
+      <!-- RAG RESULTS & FILE TREE -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+        <!-- VIRTUAL GOOGLE DRIVE TREE -->
+        <div class="lg:col-span-4 glass p-5 rounded-3xl border border-slate-800 text-xs flex flex-col gap-3">
+          <div class="font-bold text-slate-300 flex items-center justify-between pb-2 border-b border-slate-800">
+            <span>📁 Структура Google Drive</span>
+            <span class="text-[10px] text-emerald-400 font-mono">Синхронизировано</span>
+          </div>
+          <div class="space-y-2 font-mono text-[11px] text-slate-400">
+            <div class="text-sky-400">📂 (01) Складушка_Материалы/</div>
+            <div class="pl-4">├── 📁 01_Макеты_и_Игры/</div>
+            <div class="pl-4">├── 📁 02_Договоры_и_БФ/</div>
+            <div class="pl-4">├── 📁 03_КП_по_Сегментам/</div>
+            <div class="pl-4">├── 📁 04_Письма_Прошения/</div>
+            <div class="pl-4 text-emerald-400">└── 📁 05_Транскрипты_md/</div>
+            <div class="pl-8 text-slate-500">├── 2026_10_14_Встреча_1.md</div>
+            <div class="pl-8 text-slate-500">└── 2026_10_15_Голосовые_Катя.md</div>
+          </div>
+        </div>
+
+        <!-- SEARCH RESULT CARD -->
+        <div class="lg:col-span-8 glass p-6 rounded-3xl border border-slate-800 text-xs flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-400 uppercase font-mono">Ответ Цифрового Мозга:</span>
+            <span class="text-[10px] text-sky-400 font-mono" id="rag-source">Источник: 2026_10_14_Встреча_1.md</span>
+          </div>
+
+          <div id="rag-answer" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 leading-relaxed text-xs space-y-2">
+            <p><strong>По благотворительному фонду (вывод меценатских средств):</strong></p>
+            <p class="text-slate-400">
+              «Меценат уже перечислил средства в дружественный фонд Анны Станиславовны Золотаревской. Для разморозки денег Екатерине необходимо подписать и отправить стандартный договор поставки на тираж игр от имени ИП Моисеева Е.И. После этого транш поступает на расчетный счет».
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // SCREEN SWITCHER
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById('screen-' + screenId)?.classList.remove('hidden');
+      
+      // Update nav buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-sky-500', 'text-white', 'font-semibold', 'shadow-sm');
+        btn.classList.add('text-slate-400');
+      });
+      const activeBtn = document.getElementById('nav-' + screenId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400');
+        activeBtn.classList.add('bg-sky-500', 'text-white', 'font-semibold', 'shadow-sm');
+      }
+    }
+
+    // TELEGRAM CHAT ENGINE
+    const chatStream = document.getElementById('chat-stream');
+
+    function appendUserMessage(text) {
+      const msg = document.createElement('div');
+      msg.className = 'flex items-start justify-end gap-2.5 max-w-[85%] self-end';
+      msg.innerHTML = `
+        <div class="p-3.5 rounded-2xl rounded-tr-sm bg-sky-600 text-white shadow-sm leading-relaxed text-xs">
+          ${text}
+        </div>
+        <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs shrink-0 font-bold">EM</div>
+      `;
+      chatStream.appendChild(msg);
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    function appendBotMessage(html) {
+      const msg = document.createElement('div');
+      msg.className = 'flex items-start gap-2.5 max-w-[90%]';
+      msg.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-sky-600/40 flex items-center justify-center text-xs shrink-0">🤖</div>
+        <div class="p-4 rounded-2xl rounded-tl-sm bg-slate-800/90 border border-slate-700/60 text-slate-200 shadow-sm leading-relaxed text-xs space-y-2.5">
+          ${html}
+        </div>
+      `;
+      chatStream.appendChild(msg);
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    function clearChat() {
+      chatStream.innerHTML = `
+        <div class="flex items-start gap-2.5 max-w-[85%]">
+          <div class="w-7 h-7 rounded-full bg-sky-600/40 flex items-center justify-center text-xs shrink-0">🤖</div>
+          <div class="p-4 rounded-2xl rounded-tl-sm bg-slate-800/90 border border-slate-700/60 text-slate-200 shadow-sm leading-relaxed space-y-2">
+            <p>Чат очищен. Готов к новым поручениям, Екатерина!</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleEnter(e) {
+      if (e.key === 'Enter') sendManualText();
+    }
+
+    function sendManualText() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text) return;
+      appendUserMessage(text);
+      input.value = '';
+      setTimeout(() => {
+        appendBotMessage(`Принято! Обрабатываю поручение: «${text}». Создаю задачу и обновляю статус.`);
+      }, 700);
+    }
+
+    function toggleVoiceSim() {
+      document.getElementById('input-box').classList.add('hidden');
+      document.getElementById('voice-wave').classList.remove('hidden');
+      document.getElementById('voice-wave').classList.add('flex');
+    }
+
+    function stopVoiceSim() {
+      document.getElementById('input-box').classList.remove('hidden');
+      document.getElementById('voice-wave').classList.add('hidden');
+      document.getElementById('voice-wave').classList.remove('flex');
+      appendUserMessage('🎙️ [Голосовое сообщение 0:18]: «Нужен договор поставки для фонда Доброе дело на 20 игр»');
+      setTimeout(() => playScenario('contract', false), 800);
+    }
+
+    // SCENARIOS RUNNER
+    function playScenario(type, addUserMsg = true) {
+      if (type === 'contract') {
+        if (addUserMsg) appendUserMessage('🎙️ «Срочно сделай договор поставки для БФ "Доброе дело" на 20 полных комплектов Складушки»');
+        setTimeout(() => {
+          appendBotMessage(`
+            <div class="font-bold text-sky-400 flex items-center justify-between">
+              <span>📄 Договор поставки № 2026/10-18 готов</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400">PDF готов</span>
+            </div>
+            <p class="text-slate-300">
+              Контрагент: <strong>БФ «Доброе дело»</strong><br>
+              Позиция: «скЛАДушка» (полная версия) — 20 шт. по 5 500 руб.<br>
+              Сумма: <strong>110 000 руб.</strong> (без НДС)<br>
+              Факсимиле подписи и печати ИП Моисеева Е.И. наложено автоматически.
+            </p>
+            <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-between">
+              <span class="font-mono text-[11px] text-slate-300">dogovor_dobroedelo_20.pdf</span>
+              <a href="#" onclick="switchScreen('documents'); return false;" class="text-sky-400 font-semibold hover:underline">Открыть &rarr;</a>
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button onclick="alert('Договор сохранен на Google Drive в 02_Договоры_и_БФ и отправлен в мессенджер!')" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold text-center">
+                ✅ Отправить в фонд
+              </button>
+              <button onclick="alert('Режим правок открыт')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg">
+                ✏️ Изменить
+              </button>
+            </div>
+          `);
+        }, 600);
+      } else if (type === 'call_sync') {
+        if (addUserMsg) appendUserMessage('🎙️ «Поговорила с центром "Солнышко" в Коломне, куратор Елена. Играют 5 педагогов уже 3 месяца. Просят перезвонить 25 ноября — будут докупать 15 игр и заходить на ДПО»');
+        setTimeout(() => {
+          appendBotMessage(`
+            <div class="font-bold text-amber-400 flex items-center gap-1.5">
+              <span>🛡️ Подтвердите внесение в CRM и Календарь:</span>
+            </div>
+            <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1 text-slate-300">
+              <div>• <strong>Организация:</strong> Центр ОВЗ «Солнышко» (г. Коломна)</div>
+              <div>• <strong>Куратор:</strong> Елена &bull; Активных педагогов: 5 чел.</div>
+              <div>• <strong>LTV-потенциал:</strong> Повторная закупка 15 шт. + Курс ДПО</div>
+              <div>• <strong>Дата следующего контакта:</strong> 25 ноября 2026 г.</div>
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button onclick="confirmCrmSync(this)" class="flex-1 py-1.5 bg-sky-500 hover:bg-sky-400 text-white rounded-lg font-semibold">
+                ✅ Записать в CRM и поставить будильник
+              </button>
+              <button onclick="this.closest('.p-4').remove()" class="px-3 py-1.5 bg-slate-700 text-slate-300 rounded-lg">
+                Отмена
+              </button>
+            </div>
+          `);
+        }, 600);
+      } else if (type === 'positioning') {
+        if (addUserMsg) appendUserMessage('🎙️ «Меня пригласили на круглый стол в ТПП по инклюзии, сделай справку обо мне строго в GR-стиле»');
+        setTimeout(() => {
+          appendBotMessage(`
+            <div class="font-bold text-sky-400">🏛️ Текст позиционирования (Спектр GR):</div>
+            <p class="text-slate-300 italic bg-slate-900 p-3 rounded-xl border border-slate-700">
+              «Моисеева Екатерина Игоревна — автор и разработчик отечественной развивающей Phygital-методологии "скЛАДушка" для детей нормотипичного развития и детей с ОВЗ. Член рабочих групп по инклюзии и поддержке семьи при ТПП РФ. Разработка направлена на реализацию задач Десятилетия детства, укрепление социально-бытовой самостоятельности и подготовку кадров коррекционного образования».
+            </p>
+            <div class="flex gap-2">
+              <button onclick="navigator.clipboard.writeText('Моисеева Екатерина Игоревна...'); alert('Текст скопирован в буфер!')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg">
+                📋 Скопировать
+              </button>
+              <button onclick="switchScreen('documents')" class="text-sky-400 px-3 py-1.5 hover:underline">
+                Сравнить с B2B и B2C &rarr;
+              </button>
+            </div>
+          `);
+        }, 600);
+      } else if (type === 'morning_radar') {
+        appendBotMessage(`
+          <div class="font-bold text-amber-400 flex items-center gap-2">
+            <span>☀️</span> Утренний Радар Фокуса (Четверг, 15 октября)
+          </div>
+          <p class="text-slate-300">Доброе утро, Екатерина! На сегодня сформировано 3 приоритета:</p>
+          <div class="space-y-1.5 text-slate-300">
+            <div>1. 🎯 <strong>Договор БФ «Доброе дело»:</strong> отправка счета и подписанного PDF (110 000 руб.).</div>
+            <div>2. 📞 <strong>Артур Шугуров (Томск):</strong> звонок по тестовым играм в реабилитационный центр.</div>
+            <div>3. ⏳ <strong>Верстка Бродилки:</strong> верстальщик обещал макет к 18:00.</div>
+          </div>
+          <div class="p-2 bg-sky-950/40 border border-sky-500/30 rounded-lg text-sky-300 text-[11px]">
+            🛡️ Забронировано окно глубокой работы: 14:00 – 16:00 (Сколково & Финмодель).
+          </div>
+        `);
+      }
+    }
+
+    function confirmCrmSync(btn) {
+      btn.innerHTML = '✓ Записано в базу и календарь';
+      btn.classList.remove('bg-sky-500', 'hover:bg-sky-400');
+      btn.classList.add('bg-emerald-600');
+      alert('Успешно! Карточка учреждения обновлена в CRM, будильник на 25 ноября установлен в Google Календаре.');
+    }
+
+    // 3D POSITIONING LOGIC
+    const positioningTexts = {
+      gr: `
+        <div class="font-semibold text-sky-400 mb-1">Фокус: Государственные стандарты, ОВЗ, Десятилетие детства, ТПП РФ</div>
+        <p>«Екатерина Моисеева — автор запатентованной Phygital-методологии "скЛАДушка", член профильных комиссий ТПП РФ по семейному предпринимательству и инклюзии. Проект решает государственную задачу комплексной абилитации детей с ЗПР, РАС и двигательными нарушениями через сенсорно-моторные игры, формируя фундамент учебной самостоятельности».</p>
+      `,
+      b2b: `
+        <div class="font-semibold text-emerald-400 mb-1">Фокус: Корпоративные подарки, КСО/ESG, частные школы и ДПО</div>
+        <p>«Екатерина Моисеева — основатель бренда развивающих и коммуникативных игр "скЛАДушка" и "ЛАДные разговоры". Поставляем готовые решения для корпоративных подарков со смыслом (КСО/HR) и внедряем факультативные образовательные курсы для частных школ с программами повышения квалификации педагогов (ДПО)».</p>
+      `,
+      b2c: `
+        <div class="font-semibold text-pink-400 mb-1">Фокус: Семья, теплые разговоры без гаджетов, развитие речи и привычек</div>
+        <p>«Катя Моисеева — мама, автор игр, которые возвращают в семью душевное общение. Игра "скЛАДушка" учит ребенка одеваться, убирать за собой и дружить без криков и слез, а игра "ЛАДные разговоры" помогает родителям и детям слышать друг друга без смартфонов».</p>
+      `
+    };
+
+    function setPositioning(type) {
+      document.querySelectorAll('.pos-tab').forEach(b => {
+        b.classList.remove('bg-sky-500', 'text-white', 'font-semibold');
+        b.classList.add('text-slate-400');
+      });
+      document.getElementById('pos-' + type).classList.add('bg-sky-500', 'text-white', 'font-semibold');
+      document.getElementById('pos-' + type).classList.remove('text-slate-400');
+      document.getElementById('positioning-content').innerHTML = positioningTexts[type];
+    }
+    setPositioning('gr'); // Init
+
+    // DOCUMENT GENERATOR LOGIC
+    function updateDocPreview() {
+      const type = document.getElementById('doc-type').value;
+      const org = document.getElementById('doc-org').value;
+      const qty = parseInt(document.getElementById('doc-qty').value) || 0;
+      const price = parseInt(document.getElementById('doc-price').value) || 0;
+      const total = qty * price;
+
+      document.getElementById('preview-org').textContent = org;
+      document.getElementById('preview-qty').textContent = qty;
+      document.getElementById('preview-price').textContent = price.toLocaleString('ru-RU');
+      document.getElementById('preview-total').textContent = `${total.toLocaleString('ru-RU')} рублей 00 коп.`;
+      document.getElementById('preview-buyer-sign').innerHTML = `${org}<br>Подпись: ______________ / М.П.`;
+
+      if (type === 'contract_bf') {
+        document.getElementById('preview-title').textContent = 'ДОГОВОР ПОСТАВКИ ТОВАРА № 2026/10-18';
+      } else if (type === 'kp_b2b') {
+        document.getElementById('preview-title').textContent = 'КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ: КОРПОРАТИВНЫЙ ТИРАЖ';
+      } else {
+        document.getElementById('preview-title').textContent = 'ОФИЦИАЛЬНОЕ ПИСЬМО-ПРОШЕНИЕ О БЛАГОТВОРИТЕЛЬНОЙ ПОМОЩИ';
+      }
+    }
+
+    function triggerPdfExport() {
+      alert('PDF успешно сформирован с разрешением 300 DPI, прозрачным факсимиле печати ИП Моисеева Е.И. и сохранен в Google Drive / 02_Договоры_и_БФ!');
+    }
+
+    // MULTI-CONTOUR CRM LOGIC
+    const crmData = {
+      schools: {
+        headers: ['Учреждение / Город', 'Куратор / Контакт', 'Игр куплено', 'Глубина внедрения', 'LTV-Потенциал', 'Следующий контакт'],
+        rows: [
+          ['Семейная школа «Зёрнышки» (Москва)', 'Мария (Директор)', '35 шт. (выкуп)', 'Факультатив в 1-2 классах', 'Обучение 2 потока учителей (ноябрь)', '05 ноября 2026 г.'],
+          ['Центр ОВЗ «Солнышко» (г. Коломна)', 'Елена (Куратор)', '20 шт. (меценат)', '5 педагогов играют 3 мес.', 'Докупка 15 шт. + курс ДПО', '25 ноября 2026 г.'],
+          ['Детский дом №3 (г. Новосибирск)', 'Ольга Сергеевна', '0 шт. (заявка)', 'Письмо на 30 комплектов', 'Стыковка с меценатом СибТранс', 'Срочно (подбор спонсора)']
+        ]
+      },
+      patrons: {
+        headers: ['Меценат / Компания', 'Город', 'Сумма помощи', 'История проектов', 'Статус касания'],
+        rows: [
+          ['ООО «СибТрансСервис»', 'Новосибирск', '250 000 руб.', 'Покупка игр в 2024 г.', 'Готово письмо под Детдом №3'],
+          ['Фонд «Доброе дело» (ТПП)', 'Москва', '110 000 руб.', 'Транш от мецената заморожен', 'Ждет отправки договора поставки']
+        ]
+      },
+      partners: {
+        headers: ['Направление / Партнер', 'Проект', 'Текущий статус', 'Умная подсказка по Допродаже (Upsell)'],
+        rows: [
+          ['Сергей Музыкин (Djuls AI)', 'Коммерческая разработка', 'Сдали проект клиенту', '💡 Предложить клиенту ИИ-ассистента или Контент-завод'],
+          ['Любовь Ершова', 'Фестиваль «Марфа» / 5C', 'Согласование локации', 'Спецверсия игры «ЛАДные разговоры» для гостей']
+        ]
+      },
+      team: {
+        headers: ['Исполнитель / Подрядчик', 'Зона ответственности', 'Срок сдачи', 'Статус контроля'],
+        rows: [
+          ['Дизайнер-верстальщик (Illustrator)', 'Правка «Бродилки» (цифры 0–9)', '15 октября (18:00)', '⚠️ Ждем макет на утверждение'],
+          ['Типография упаковки', 'Расчет партии твердых коробок (59 т.р.)', '20 октября', 'Ждет транша от фонда']
+        ]
+      }
+    };
+
+    function setCrmTab(tabId) {
+      document.querySelectorAll('.crm-tab').forEach(b => {
+        b.classList.remove('bg-sky-500', 'text-white', 'font-semibold');
+        b.classList.add('text-slate-400');
+      });
+      document.getElementById('crm-tab-' + tabId).classList.add('bg-sky-500', 'text-white', 'font-semibold');
+      document.getElementById('crm-tab-' + tabId).classList.remove('text-slate-400');
+
+      const data = crmData[tabId];
+      // Render headers
+      document.getElementById('crm-thead-tr').innerHTML = data.headers.map(h => `<th class="px-5 py-3.5">${h}</th>`).join('');
+      // Render rows
+      document.getElementById('crm-tbody').innerHTML = data.rows.map(row => `
+        <tr class="hover:bg-slate-900/60 transition-colors">
+          ${row.map((cell, idx) => `
+            <td class="px-5 py-4 ${idx === 0 ? 'font-semibold text-white' : ''}">
+              ${cell.includes('⚠️') ? `<span class="text-amber-400 font-medium">${cell}</span>` : cell}
+            </td>
+          `).join('')}
+        </tr>
+      `).join('');
+    }
+    setCrmTab('schools'); // Init
+
+    // RAG DIGITAL BRAIN SEARCH LOGIC
+    function searchRag() {
+      const q = document.getElementById('rag-query').value.toLowerCase();
+      const ansBox = document.getElementById('rag-answer');
+      const srcBox = document.getElementById('rag-source');
+
+      if (q.includes('шугуров') || q.includes('артур') || q.includes('томск')) {
+        srcBox.textContent = 'Источник: Дневник_Проекта_Складушка.md // Раздел 6';
+        ansBox.innerHTML = `
+          <p><strong>По договоренностям с Артуром Шугуровым («Дикобраз», г. Томск):</strong></p>
+          <p class="text-slate-400">
+            «20+ лет стажа в педагогике, открывает реабилитационный центр для детей. Сергей передал контакт Екатерине для прямого посева игры. Договорились отправить 2 тестовых комплекта для работы с детьми под запись отзывов и совместный контент».
+          </p>
+        `;
+      } else if (q.includes('склад') || q.includes('цена') || q.includes('остаток')) {
+        srcBox.textContent = 'Источник: Дневник_Проекта_Складушка.md // Раздел 2';
+        ansBox.innerHTML = `
+          <p><strong>По складским остаткам и ценам:</strong></p>
+          <p class="text-slate-400">
+            «Всего на складе заморожено ~1 400 комплектов: 1 100 полных (себестоимость 2 200 руб., продажа по 5 500 руб.) и 300 упрощенных (себестоимость 500–750 руб., антикризисная распродажа по 1 200 – 1 500 руб. для возврата кэша)».
+          </p>
+        `;
+      } else {
+        srcBox.textContent = 'Источник: 2026_10_14_Встреча_1.md';
+        ansBox.innerHTML = `
+          <p><strong>По вашему запросу найдено:</strong></p>
+          <p class="text-slate-400">
+            «Меценат перевел средства в фонд Анны Золотаревской. Для получения денег нужен подписанный договор поставки от ИП Моисеева Е.И. Выпуск договора доступен во вкладке "Конвейер Документов"».
+          </p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
